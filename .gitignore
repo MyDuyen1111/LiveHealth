@@ -1,0 +1,42 @@
+# LiveHealth repository ignores
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+target/
+node_modules/
+dist/
+
+# Logs
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.mysql-data/
+.redis-data/
+.run/
+
+# Conda
+.conda/
+
+# Vite cache
+.vite/
