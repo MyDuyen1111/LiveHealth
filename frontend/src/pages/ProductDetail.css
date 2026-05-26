@@ -1,0 +1,408 @@
+/* ══════════════════════════════
+   PRODUCT DETAIL – Ecobazar
+   ══════════════════════════════ */
+
+/* breadcrumb */
+.pd-breadcrumb {
+  background: var(--gray-900);
+  padding: 14px 0;
+}
+.pd-bc-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--gray-400);
+}
+.pd-bc-inner a { color: var(--gray-400); }
+.pd-bc-inner a:hover { color: var(--white); }
+
+/* main */
+.pd-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  padding: 48px 15px;
+}
+
+/* gallery */
+.pd-gallery {
+  display: flex;
+  gap: 16px;
+}
+.pd-thumbs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.pd-thumb {
+  width: 80px;
+  height: 80px;
+  border: 2px solid var(--gray-200);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 4px;
+}
+.pd-thumb.active { border-color: var(--green); }
+.pd-thumb img { width: 100%; height: 100%; object-fit: contain; }
+.pd-thumb-nav {
+  color: var(--gray-500);
+  padding: 4px;
+}
+.pd-main-img {
+  flex: 1;
+  background: var(--gray-50);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+.pd-main-img img { max-height: 420px; object-fit: contain; }
+
+/* info */
+.pd-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.pd-title-row h1 {
+  flex: 1 1 260px;
+  min-width: 0;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--gray-900);
+}
+.pd-stock-group {
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-top: 7px;
+}
+.pd-stock-badge {
+  background: var(--green-light);
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+.pd-stock-badge.out {
+  background: #fee2e2;
+  color: var(--red);
+}
+.pd-stock-quantity {
+  color: var(--gray-700);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.pd-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: var(--gray-500);
+}
+.pd-stars { display: flex; gap: 2px; }
+.pd-review-count { color: var(--gray-900); }
+.pd-sku { color: var(--gray-400); }
+
+.pd-price-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.pd-old-price {
+  font-size: 18px;
+  text-decoration: line-through;
+  color: var(--gray-400);
+}
+.pd-price {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--gray-900);
+}
+.pd-discount {
+  background: var(--red);
+  color: var(--white);
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.pd-brand-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: var(--gray-600);
+}
+.pd-share {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pd-social {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+}
+.pd-social.fb { background: #1877F2; color: var(--white); }
+.pd-social.tw { background: #1DA1F2; color: var(--white); }
+
+.pd-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--gray-600);
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--gray-200);
+  border-top: 1px solid var(--gray-200);
+  padding-top: 24px;
+}
+
+/* quantity */
+.pd-action-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.pd-qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--gray-200);
+  border-radius: 50px;
+  overflow: hidden;
+}
+.pd-qty button {
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+  color: var(--gray-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pd-qty button:hover { background: var(--gray-50); }
+.pd-qty span {
+  width: 44px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+  border-left: 1px solid var(--gray-200);
+  border-right: 1px solid var(--gray-200);
+  line-height: 44px;
+}
+.pd-add-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--green);
+  color: var(--white);
+  padding: 0 32px;
+  height: 44px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background .2s;
+}
+.pd-add-btn:hover { background: var(--green-dark); }
+.pd-wish-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-500);
+  transition: all .2s;
+}
+.pd-wish-btn:hover { border-color: var(--green); color: var(--green); }
+
+.pd-extra {
+  font-size: 14px;
+  color: var(--gray-600);
+  line-height: 2;
+  padding-top: 20px;
+  border-top: 1px solid var(--gray-200);
+}
+
+/* ── TABS ── */
+.pd-tabs-wrap {
+  padding-bottom: 60px;
+  border-bottom: 1px solid var(--gray-200);
+  margin-bottom: 48px;
+}
+.pd-tab-nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--gray-200);
+  margin-bottom: 32px;
+}
+.pd-tab-btn {
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray-500);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all .2s;
+}
+.pd-tab-btn.active {
+  color: var(--green);
+  border-bottom-color: var(--green);
+}
+
+/* desc tab */
+.pd-tab-desc {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.pd-tab-text p {
+  font-size: 14px;
+  color: var(--gray-600);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.pd-check-list { margin-top: 20px; }
+.pd-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--gray-700);
+  margin-bottom: 10px;
+}
+.pd-tab-video {
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+}
+.pd-tab-video img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+.pd-tab-video-info {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+.pd-tab-badge {
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  font-weight: 500;
+}
+.pd-tab-badge.green { background: var(--green-light); color: var(--green-dark); }
+
+/* info tab */
+.pd-tab-info-table table {
+  width: 100%;
+  max-width: 600px;
+  border-collapse: collapse;
+}
+.pd-tab-info-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--gray-200);
+  font-size: 14px;
+}
+.pd-tab-info-table td:first-child {
+  font-weight: 500;
+  color: var(--gray-900);
+  width: 200px;
+}
+
+/* feedback tab */
+.pd-tab-feedback {
+  max-width: 800px;
+}
+.pd-review-card {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--gray-200);
+}
+.pd-review-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.pd-review-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.pd-review-header strong {
+  display: block;
+  font-size: 14px;
+  color: var(--gray-900);
+}
+.pd-review-stars { display: flex; gap: 2px; margin-top: 2px; }
+.pd-review-date {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--gray-400);
+}
+.pd-review-text {
+  font-size: 14px;
+  color: var(--gray-600);
+  line-height: 1.6;
+}
+.pd-load-more {
+  margin-top: 20px;
+  background: var(--green);
+  color: var(--white);
+  padding: 10px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background .2s;
+}
+.pd-load-more:hover { background: var(--green-dark); }
+
+/* related */
+.pd-related {
+  padding-bottom: 60px;
+}
+.pd-related h2 {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 32px;
+}
+.pd-related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 992px) {
+  .pd-main { grid-template-columns: 1fr; }
+  .pd-tab-desc { grid-template-columns: 1fr; }
+  .pd-related-grid { grid-template-columns: repeat(2, 1fr); }
+  .pd-gallery { flex-direction: column-reverse; }
+  .pd-thumbs { flex-direction: row; }
+}
