@@ -1,0 +1,185 @@
+/* ══════════════════════════════
+   PAYMENT RETURN PAGE
+   ══════════════════════════════ */
+
+.pr-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f1923 0%, #1a2d3d 50%, #0f2a1a 100%);
+  font-family: 'Inter', sans-serif;
+}
+
+.pr-center {
+  display: flex;
+  justify-content: center;
+  padding: 60px 15px 80px;
+}
+
+/* Card */
+.pr-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 24px;
+  padding: 52px 44px;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.4);
+}
+
+.pr-card h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  margin: 20px 0 10px;
+}
+.pr-subtitle {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  margin: 0 0 28px;
+  line-height: 1.6;
+}
+
+/* ── Success card ── */
+.pr-card--success { border-color: rgba(46, 204, 113, 0.3); }
+
+.pr-checkmark {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 8px 30px rgba(46,204,113,0.4);
+  animation: pr-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.pr-checkmark svg {
+  width: 40px;
+  height: 40px;
+  stroke: #fff;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pr-checkmark svg path { stroke-dasharray: 48; stroke-dashoffset: 0; animation: pr-draw 0.6s 0.3s ease forwards; }
+.pr-checkmark svg circle { stroke: rgba(255,255,255,0.2); stroke-width: 1.5; }
+
+@keyframes pr-pop {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes pr-draw {
+  from { stroke-dashoffset: 48; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* ── Failed card ── */
+.pr-card--failed { border-color: rgba(231, 76, 60, 0.3); }
+.pr-icon-fail {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 34px;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 8px 30px rgba(231,76,60,0.4);
+  animation: pr-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ── Info card ── */
+.pr-card--info { border-color: rgba(52, 152, 219, 0.3); }
+.pr-icon { font-size: 60px; margin-bottom: 10px; }
+
+/* Info grid */
+.pr-info-grid {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  text-align: left;
+}
+.pr-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 18px;
+  font-size: 13px;
+  gap: 12px;
+}
+.pr-info-row:not(:last-child) {
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.pr-info-row span { color: rgba(255,255,255,0.5); flex-shrink: 0; }
+.pr-info-row strong {
+  color: #fff;
+  font-weight: 600;
+  text-align: right;
+  word-break: break-all;
+}
+.pr-amount { color: #2ecc71 !important; font-size: 16px !important; }
+
+/* Polling badge */
+.pr-polling-badge {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+.pr-polling-badge--success { background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
+.pr-polling-badge--pending { background: rgba(243,156,18,0.15); color: #f39c12; border: 1px solid rgba(243,156,18,0.3); }
+.pr-polling-badge--failed  { background: rgba(231,76,60,0.15);  color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); }
+
+/* Actions */
+.pr-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.pr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 28px;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: #fff;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all .25s;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(46,204,113,0.3);
+}
+.pr-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(46,204,113,0.45);
+  color: #fff;
+}
+.pr-btn--outline {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.8);
+  box-shadow: none;
+}
+.pr-btn--outline:hover {
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  box-shadow: none;
+}
+
+@media (max-width: 480px) {
+  .pr-card { padding: 36px 20px; }
+  .pr-actions { flex-direction: column; }
+  .pr-btn { width: 100%; }
+}
