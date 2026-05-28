@@ -19,6 +19,7 @@ import AccountDashboard from './pages/AccountDashboard';
 import OrderHistory from './pages/OrderHistory';
 import OrderDetail from './pages/OrderDetail';
 import AccountSettings from './pages/AccountSettings';
+import AccountContacts from './pages/AccountContacts';
 import Faq from './pages/Faq';
 import PaymentPage from './pages/PaymentPage';
 import PaymentReturn from './pages/PaymentReturn';
@@ -110,6 +111,7 @@ function App() {
               <Route path="/account" element={<ProtectedRoute><AccountDashboard /></ProtectedRoute>} />
               <Route path="/account/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
               <Route path="/account/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
+              <Route path="/account/contacts" element={<ProtectedRoute><AccountContacts /></ProtectedRoute>} />
               <Route path="/account/settings" element={<ProtectedRoute><AccountSettings /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>

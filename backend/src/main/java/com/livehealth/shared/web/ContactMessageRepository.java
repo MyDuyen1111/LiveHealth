@@ -10,4 +10,13 @@ public class ContactMessageRepository extends BaseRepository<ContactMessage, UUI
     public ContactMessageRepository() {
         super(ContactMessage.class);
     }
+
+    public java.util.List<ContactMessage> findByEmailOrderByCreatedAtDesc(String email) {
+        return em.createQuery(
+                "SELECT c FROM ContactMessage c WHERE c.email = :email ORDER BY c.createdAt DESC", 
+                ContactMessage.class
+        )
+        .setParameter("email", email)
+        .getResultList();
+    }
 }

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { LayoutDashboard, ShoppingBag, ShoppingCart, Settings, LogOut, Shield } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, ShoppingCart, Settings, LogOut, Shield, MessageSquare } from 'lucide-react';
 import { useLang } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import './AccountSidebar.css';
@@ -8,6 +8,7 @@ const navItems = [
   { key: 'dashboard', icon: LayoutDashboard, path: '/account', labelKey: 'account.dashboard' },
   { key: 'orders', icon: ShoppingBag, path: '/account/orders', labelKey: 'account.orderHistory' },
   { key: 'cart', icon: ShoppingCart, path: '/cart', labelKey: 'account.shoppingCart' },
+  { key: 'contacts', icon: MessageSquare, path: '/account/contacts', labelKey: 'account.contactMessages' },
   { key: 'settings', icon: Settings, path: '/account/settings', labelKey: 'account.settings' },
 ];
 

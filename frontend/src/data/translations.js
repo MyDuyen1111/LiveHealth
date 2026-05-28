@@ -406,6 +406,21 @@ export const translations = {
     'account.navigation': 'Điều hướng',
     'account.dashboard': 'Bảng điều khiển',
     'account.orderHistory': 'Lịch sử đơn hàng',
+    'account.contactMessages': 'Hộp thư góp ý',
+    
+    // Contact Messages page
+    'contactMessages.title': 'Hộp Thư Góp Ý',
+    'contactMessages.breadcrumb': 'Hộp thư góp ý',
+    'contactMessages.noMessages': 'Bạn chưa gửi tin nhắn góp ý nào.',
+    'contactMessages.sentAt': 'Đã gửi lúc:',
+    'contactMessages.status': 'Trạng thái:',
+    'contactMessages.pending': 'Đang chờ phản hồi',
+    'contactMessages.replied': 'Đã phản hồi',
+    'contactMessages.replyFromAdmin': 'Phản hồi từ Admin:',
+    'contactMessages.repliedAt': 'Phản hồi lúc:',
+    'account.newReplyTitle': 'Bạn có phản hồi mới từ Ban Quản Trị!',
+    'account.newReplyDesc': 'Admin đã phản hồi thư liên hệ của bạn.',
+    'account.viewNow': 'Xem ngay',
 
     'account.shoppingCart': 'Giỏ hàng',
     'account.settings': 'Cài đặt',
@@ -1088,6 +1103,21 @@ export const translations = {
     'account.navigation': 'Navigation',
     'account.dashboard': 'Dashboard',
     'account.orderHistory': 'Order History',
+    'account.contactMessages': 'Contact Feedback',
+    
+    // Contact Messages page
+    'contactMessages.title': 'Contact Feedback',
+    'contactMessages.breadcrumb': 'Contact Feedback',
+    'contactMessages.noMessages': 'You haven\'t sent any contact messages yet.',
+    'contactMessages.sentAt': 'Sent at:',
+    'contactMessages.status': 'Status:',
+    'contactMessages.pending': 'Pending',
+    'contactMessages.replied': 'Replied',
+    'contactMessages.replyFromAdmin': 'Admin\'s Reply:',
+    'contactMessages.repliedAt': 'Replied at:',
+    'account.newReplyTitle': 'New Reply from Admin!',
+    'account.newReplyDesc': 'Admin has responded to your contact request.',
+    'account.viewNow': 'View Now',
 
     'account.shoppingCart': 'Shopping Cart',
     'account.settings': 'Settings',

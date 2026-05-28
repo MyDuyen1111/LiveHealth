@@ -4,6 +4,7 @@ import { useLang } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { orderApi } from '../api/orderApi';
 import { formatPrice } from '../utils/format';
+import { get } from '../api/apiClient';
 import AccountSidebar from '../components/AccountSidebar';
 import './AccountDashboard.css';
 
@@ -11,11 +12,16 @@ const AccountDashboard = () => {
   const { t } = useLang();
   const { user } = useAuth();
   const [recentOrders, setRecentOrders] = useState([]);
+  const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
     orderApi.getMyOrders(1, 6).then(data => {
       setRecentOrders(data?.items || []);
     }).catch(() => {});
+
+    get('/contact/my-messages')
+      .then(res => setContacts(res || []))
+      .catch(() => {});
   }, []);
 
   const getStatusLabel = (status) => {
@@ -39,6 +45,45 @@ const AccountDashboard = () => {
         <AccountSidebar activeItem="dashboard" />
 
         <div className="dash-main">
+          {/* Notification banner */}
+          {contacts.some(c => c.status === 'REPLIED') && (
+            <div className="dash-notify-alert" style={{
+              background: '#e8f5e9',
+              borderLeft: '4px solid #2c742f',
+              padding: '16px 20px',
+              borderRadius: '0 8px 8px 0',
+              marginBottom: '25px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.02)',
+              gap: '15px',
+              flexWrap: 'wrap'
+            }}>
+              <div>
+                <strong style={{ color: '#2c742f', display: 'block', marginBottom: '4px', fontSize: '15px' }}>
+                  📢 {t('account.newReplyTitle')}
+                </strong>
+                <span style={{ color: '#555555', fontSize: '14px' }}>
+                  {t('account.newReplyDesc')}
+                </span>
+              </div>
+              <Link to="/account/contacts" style={{
+                background: '#2c742f',
+                color: '#ffffff',
+                textDecoration: 'none',
+                padding: '8px 18px',
+                borderRadius: '20px',
+                fontSize: '13px',
+                fontWeight: '600',
+                transition: 'all 0.2s',
+                whiteSpace: 'nowrap'
+              }}>
+                {t('account.viewNow')}
+              </Link>
+            </div>
+          )}
+
           {/* Profile + Billing row */}
           <div className="dash-top-row">
             {/* Profile card */}

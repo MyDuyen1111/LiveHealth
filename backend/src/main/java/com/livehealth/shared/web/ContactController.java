@@ -11,6 +11,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -80,5 +81,16 @@ public class ContactController {
         }
 
         return VsResponseUtil.success(new CommonResponseDto(HttpStatus.OK, "Gửi tin nhắn liên hệ thành công."));
+    }
+
+    @GET
+    @Path("/my-messages")
+    public Response getMyContactMessages() {
+        String email = com.livehealth.shared.security.SecurityUtils.getCurrentEmail();
+        if (email == null || email.isBlank()) {
+            return VsResponseUtil.success(java.util.Collections.emptyList());
+        }
+        java.util.List<ContactMessage> messages = contactMessageRepository.findByEmailOrderByCreatedAtDesc(email);
+        return VsResponseUtil.success(messages);
     }
 }
