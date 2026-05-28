@@ -259,6 +259,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public OrderResponseDto updateOrderStatus(UUID id, UpdateOrderStatusRequestDto request) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new VsException(HttpStatus.NOT_FOUND, ErrorMessage.Order.ERR_ORDER_NOT_FOUND));
@@ -270,6 +271,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public CommonResponseDto cancelOrder(UUID id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new VsException(HttpStatus.NOT_FOUND, ErrorMessage.Order.ERR_ORDER_NOT_FOUND));
