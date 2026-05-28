@@ -58,11 +58,29 @@ public class Application {
                 passwordEncoder);
 
         ensureTestAccount(
+                "admin@livehealth.vn",
+                "Admin123@",
+                "System",
+                "Admin VN",
+                "0901234567",
+                Role.ADMIN,
+                passwordEncoder);
+
+        ensureTestAccount(
                 "user@livehealth.vn",
                 "User123@",
                 "Khách",
                 "LiveHealth",
                 "0901234567",
+                Role.USER,
+                passwordEncoder);
+
+        ensureTestAccount(
+                "Duyeniuxinh@dangiu.embe",
+                "embeiuu1111@",
+                "Duyên",
+                "Mỹ Duyên",
+                "0987654321",
                 Role.USER,
                 passwordEncoder);
 

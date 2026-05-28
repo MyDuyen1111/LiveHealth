@@ -54,12 +54,14 @@ public interface CartMapper {
             }
 
             // Apply shipping cost
-            if (cart.getShippingMethod() != null) {
+            if (cart.getShippingMethod() != null && itemsTotal > 0) {
                 finalTotal += cart.getShippingMethod().getPrice();
             }
 
             // Set lower bound to 0
-            if (finalTotal < 0) {
+            if (itemsTotal == 0) {
+                finalTotal = 0;
+            } else if (finalTotal < 0) {
                 finalTotal = 0;
             }
 
