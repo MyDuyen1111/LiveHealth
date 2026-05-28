@@ -23,7 +23,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.UUID;
 
 @RestApiV1
-@Path("/categories")
+@Path("/api/v1/categories")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CategoryController {

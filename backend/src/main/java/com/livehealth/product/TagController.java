@@ -23,7 +23,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.UUID;
 
 @RestApiV1
-@Path("/tags")
+@Path("/api/v1/tags")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TagController {

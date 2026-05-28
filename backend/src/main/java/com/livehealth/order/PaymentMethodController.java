@@ -22,6 +22,7 @@ import lombok.experimental.FieldDefaults;
 import java.util.UUID;
 
 @RestApiV1
+@Path("/api/v1")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PaymentMethodController {

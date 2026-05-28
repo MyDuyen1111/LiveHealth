@@ -23,6 +23,7 @@ import java.util.*;
 import com.livehealth.shared.config.VNPayConfig;
 
 @RestApiV1
+@Path("/api/v1")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PaymentController {
