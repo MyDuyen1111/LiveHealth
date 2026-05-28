@@ -131,7 +131,7 @@ const AdminOrders = () => {
                 <h4 style={{ borderBottom: '1px solid #eee', paddingBottom: 6, marginBottom: 10, fontSize: 14, color: '#333' }}>
                   {t('admin.customerInfo')}
                 </h4>
-                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.fullName')}:</strong> {detailModal.billingAddress?.firstName || ''} {detailModal.billingAddress?.lastName || t('admin.customer')}</p>
+                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.fullName')}:</strong> {detailModal.userFullName || t('admin.customer')}</p>
                 <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.contactEmail')}:</strong> {detailModal.contactEmail || '—'}</p>
                 <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.contactPhone')}:</strong> {detailModal.contactPhone || '—'}</p>
                 <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.paymentMethod')}:</strong> {detailModal.paymentMethodName || detailModal.paymentMethod?.name || 'COD'}</p>
