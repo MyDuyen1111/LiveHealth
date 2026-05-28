@@ -1,0 +1,22 @@
+# ═══════════════════════════════════════════
+#  LiveHealth — Python Runtime Dependencies
+#  Dùng cho cả AI Service và Scripts
+# ═══════════════════════════════════════════
+
+# ── AI Service (FastAPI) ──
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+pydantic==2.9.0
+pydantic-settings==2.5.0
+
+# ── Google Gemini LLM ──
+google-genai==1.10.0
+
+# ── Database ──
+mysql-connector-python==9.0.0
+
+# ── Config ──
+python-dotenv==1.0.1
+
+# ── Scripts & Utilities ──
+requests==2.32.3

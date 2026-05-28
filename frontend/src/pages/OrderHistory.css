@@ -1,0 +1,122 @@
+/* ══════════════════════════════
+   ORDER HISTORY PAGE
+   ══════════════════════════════ */
+
+/* breadcrumb */
+.oh-breadcrumb {
+  background: var(--gray-900);
+  padding: 14px 0;
+}
+.oh-bc-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--gray-400);
+}
+.oh-bc-inner .bc-active { color: var(--green); font-weight: 500; }
+
+/* layout */
+.oh-layout {
+  display: flex;
+  gap: 24px;
+  padding: 40px 0 60px;
+  align-items: flex-start;
+}
+.oh-main { flex: 1; min-width: 0; }
+
+/* card */
+.oh-card {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.oh-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 20px;
+}
+
+/* table */
+.oh-table-wrap { overflow-x: auto; }
+.oh-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.oh-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--gray-200);
+  white-space: nowrap;
+}
+.oh-table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--gray-700);
+  border-bottom: 1px solid var(--gray-100);
+}
+.oh-status {
+  font-size: 13px;
+  font-weight: 500;
+}
+.oh-status--processing { color: var(--orange); }
+.oh-status--onTheWay { color: #2196f3; }
+.oh-status--completed { color: var(--green); }
+.oh-view-detail {
+  font-size: 13px;
+  color: var(--green);
+  font-weight: 500;
+}
+.oh-view-detail:hover { text-decoration: underline; }
+
+/* pagination */
+.oh-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+.oh-page-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-500);
+  transition: all 0.2s;
+}
+.oh-page-btn:hover:not(:disabled) {
+  background: var(--gray-100);
+  color: var(--gray-900);
+}
+.oh-page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.oh-page-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--gray-600);
+  transition: all 0.2s;
+}
+.oh-page-num:hover { background: var(--gray-100); }
+.oh-page-num.active {
+  background: var(--green);
+  color: var(--white);
+}
+
+@media (max-width: 768px) {
+  .oh-layout { flex-direction: column; }
+}

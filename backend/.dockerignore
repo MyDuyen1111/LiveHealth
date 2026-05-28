@@ -1,0 +1,37 @@
+# Build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Env files (loaded via docker-compose, not baked into image)
+.env
+.env.example
+
+# Maven wrapper (already in base image)
+.mvn/
+mvnw
+mvnw.cmd
+
+# Docs
+*.md
+SQL.sql

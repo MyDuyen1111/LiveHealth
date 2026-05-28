@@ -1,0 +1,14 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-9.0.3, pluggy-1.6.0 -- /home/hahoang/Documents/LiveHealth/venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/hahoang/Documents/LiveHealth/selenium_tests
+collecting ... collected 6 items
+
+test_search.py::test_TC01_search_valid_keyword PASSED                    [ 16%]
+test_search.py::test_TC02_search_no_result PASSED                        [ 33%]
+test_search.py::test_TC03_search_empty_input PASSED                      [ 50%]
+test_order.py::test_TC01_order_success PASSED                            [ 66%]
+test_order.py::test_TC02_order_empty_cart PASSED                         [ 83%]
+test_order.py::test_TC03_order_not_logged_in PASSED                      [100%]
+
+========================= 6 passed in 64.26s (0:01:04) =========================

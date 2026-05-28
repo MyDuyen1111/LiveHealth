@@ -1,0 +1,118 @@
+.adm-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f2f5;
+}
+
+/* ── Sidebar ── */
+.adm-sidebar {
+  width: 260px;
+  background: #1a1d23;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.adm-sidebar-header {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.adm-sidebar-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  color: #00B207;
+}
+
+.adm-sidebar-user {
+  font-size: 12px;
+  color: #a0a3ab;
+  margin-top: 6px;
+}
+
+.adm-nav {
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.adm-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #a0a3ab;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s;
+  border: none;
+  background: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.adm-nav-item:hover {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+}
+
+.adm-nav-item.active {
+  background: #00B207;
+  color: #fff;
+}
+
+/* ── Sidebar Footer ── */
+.adm-sidebar-footer {
+  padding: 12px 10px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.adm-lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  color: #a0a3ab;
+}
+
+.adm-lang-btn {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: #a0a3ab;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.adm-lang-btn.active {
+  background: #00B207;
+  color: #fff;
+}
+
+.adm-logout-btn:hover {
+  background: rgba(234,67,53,0.15) !important;
+  color: #ea4335 !important;
+}
+
+/* ── Main ── */
+.adm-main {
+  flex: 1;
+  margin-left: 260px;
+  padding: 28px 32px;
+  overflow-y: auto;
+}

@@ -1,0 +1,114 @@
+/* Newsletter Popup */
+.nl-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: nlFadeIn .3s;
+}
+@keyframes nlFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.nl-popup {
+  background: var(--white);
+  border-radius: 12px;
+  display: flex;
+  max-width: 640px;
+  width: 90%;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 24px 60px rgba(0,0,0,.25);
+  animation: nlSlideUp .35s;
+}
+@keyframes nlSlideUp {
+  from { transform: translateY(24px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.nl-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: var(--gray-600);
+  z-index: 2;
+}
+.nl-close:hover { color: var(--gray-900); }
+.nl-img {
+  width: 240px;
+  flex-shrink: 0;
+}
+.nl-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nl-content {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.nl-content h2 {
+  font-size: 24px;
+  color: var(--gray-900);
+  margin-bottom: 12px;
+}
+.nl-content p {
+  font-size: 14px;
+  color: var(--gray-500);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.nl-highlight {
+  color: var(--green);
+  font-weight: 600;
+}
+.nl-form {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+  border: 1px solid var(--gray-200);
+  border-radius: 50px;
+  overflow: hidden;
+}
+.nl-form input {
+  flex: 1;
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  outline: none;
+}
+.nl-sub-btn {
+  background: var(--green);
+  color: var(--white);
+  padding: 0 28px;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 50px;
+  margin: 3px;
+  transition: background .2s;
+}
+.nl-sub-btn:hover { background: var(--green-dark); }
+.nl-no-show {
+  font-size: 13px;
+  color: var(--gray-500);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+.nl-no-show input {
+  accent-color: var(--green);
+  cursor: pointer;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 576px) {
+  .nl-img { display: none; }
+}
