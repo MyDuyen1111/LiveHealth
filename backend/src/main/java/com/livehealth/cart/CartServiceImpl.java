@@ -59,6 +59,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import com.livehealth.shared.base.HttpStatus;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ import java.util.UUID;
 @ApplicationScoped
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Transactional(rollbackOn = Exception.class)
 public class CartServiceImpl implements CartService {
 
     CartRepository cartRepository;
@@ -133,9 +135,9 @@ public class CartServiceImpl implements CartService {
         }
 
         cart.setUpdatedAt(LocalDateTime.now());
-        cartRepository.save(cart);
+        Cart savedCart = cartRepository.save(cart);
 
-        return cartMapper.toResponseDto(cart);
+        return cartMapper.toResponseDto(savedCart);
     }
 
     @Override
@@ -161,9 +163,9 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.save(item);
 
         cart.setUpdatedAt(LocalDateTime.now());
-        cartRepository.save(cart);
+        Cart savedCart = cartRepository.save(cart);
 
-        return cartMapper.toResponseDto(cart);
+        return cartMapper.toResponseDto(savedCart);
     }
 
     @Override
@@ -177,7 +179,7 @@ public class CartServiceImpl implements CartService {
             throw new VsException(HttpStatus.FORBIDDEN, "Item does not belong to your cart");
         }
 
-        cart.getItems().remove(item);
+        cart.getItems().removeIf(i -> i.getId().equals(itemId));
         cartItemRepository.delete(item);
 
         cart.setUpdatedAt(LocalDateTime.now());
@@ -214,9 +216,9 @@ public class CartServiceImpl implements CartService {
 
         cart.setAppliedCoupon(promotion);
         cart.setUpdatedAt(LocalDateTime.now());
-        cartRepository.save(cart);
+        Cart savedCart = cartRepository.save(cart);
 
-        return cartMapper.toResponseDto(cart);
+        return cartMapper.toResponseDto(savedCart);
     }
 
     @Override
@@ -232,9 +234,9 @@ public class CartServiceImpl implements CartService {
 
         cart.setShippingMethod(shippingMethod);
         cart.setUpdatedAt(LocalDateTime.now());
-        cartRepository.save(cart);
+        Cart savedCart = cartRepository.save(cart);
 
-        return cartMapper.toResponseDto(cart);
+        return cartMapper.toResponseDto(savedCart);
     }
 
     @Override
@@ -250,8 +252,8 @@ public class CartServiceImpl implements CartService {
 
         cart.setPaymentMethod(paymentMethod);
         cart.setUpdatedAt(LocalDateTime.now());
-        cartRepository.save(cart);
+        Cart savedCart = cartRepository.save(cart);
 
-        return cartMapper.toResponseDto(cart);
+        return cartMapper.toResponseDto(savedCart);
     }
 }
