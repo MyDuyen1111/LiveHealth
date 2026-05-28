@@ -61,7 +61,7 @@ echo " ✅ Same Day"
 echo ""
 echo "📋 Fetching category IDs..."
 CATS=$(curl -s "$API/categories")
-get_cat_id() { echo "$CATS" | python3 -c "import sys,json; cats=json.load(sys.stdin)['data']; print(next(c['id'] for c in cats if '$1' in c['name']))"; }
+get_cat_id() { echo "$CATS" | python3 -c "import sys,json; cats=json.load(sys.stdin)['data']['items']; print(next(c['id'] for c in cats if '$1' in c['name']))"; }
 
 CAT_MEAT=$(get_cat_id "Thịt")
 CAT_FISH=$(get_cat_id "Cá")
@@ -71,7 +71,7 @@ CAT_FRUIT=$(get_cat_id "Hoa")
 
 # Get brand IDs
 BRANDS=$(curl -s "$API/brands")
-get_brand_id() { echo "$BRANDS" | python3 -c "import sys,json; brands=json.load(sys.stdin)['data']; print(next(b['id'] for b in brands if '$1' in b['name']))"; }
+get_brand_id() { echo "$BRANDS" | python3 -c "import sys,json; brands=json.load(sys.stdin)['data']['items']; print(next(b['id'] for b in brands if '$1' in b['name']))"; }
 
 BRAND_LH=$(get_brand_id "LiveHealth")
 BRAND_OG=$(get_brand_id "Nông Trại")
