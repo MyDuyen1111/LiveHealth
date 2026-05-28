@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { adminUserApi } from '../../api/adminApi';
 import { useToast } from '../../components/admin/Toast';
+import { useLang } from '../../context/LanguageContext';
 import './Admin.css';
 
 const empty = { firstName: '', lastName: '', email: '', phone: '', password: '', role: 'USER' };
@@ -13,6 +14,7 @@ const AdminUsers = () => {
   const [form, setForm] = useState(empty);
   const [saving, setSaving] = useState(false);
   const { addToast } = useToast();
+  const { t } = useLang();
 
   const load = () => {
     setLoading(true);
@@ -50,7 +52,7 @@ const AdminUsers = () => {
     try {
       if (modal === 'create') {
         await adminUserApi.create(form);
-        addToast('Tạo người dùng thành công!');
+        addToast(t('admin.userAddSuccess'));
       } else {
         // Exclude password if empty in update
         const updateData = { ...form };
@@ -58,49 +60,49 @@ const AdminUsers = () => {
           delete updateData.password;
         }
         await adminUserApi.update(modal.id, updateData);
-        addToast('Cập nhật người dùng thành công!');
+        addToast(t('admin.userUpdateSuccess'));
       }
       close();
       load();
     } catch (e) {
-      addToast(e.message || 'Lưu thất bại', 'error');
+      addToast(e.message || t('admin.saveFailed'), 'error');
     }
     setSaving(false);
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Bạn có chắc chắn muốn xóa tài khoản này không?')) return;
+    if (!confirm(t('admin.userDeleteConfirm'))) return;
     try {
       await adminUserApi.delete(id);
-      addToast('Xóa tài khoản thành công!');
+      addToast(t('admin.userDeleteSuccess'));
       load();
     } catch (e) {
-      addToast(e.message || 'Xóa thất bại', 'error');
+      addToast(e.message || t('admin.deleteFailed'), 'error');
     }
   };
 
   return (
     <div>
       <div className="adm-page-header">
-        <h1 className="adm-page-title">Quản lý Tài khoản</h1>
+        <h1 className="adm-page-title">{t('admin.usersTitle')}</h1>
         <button className="adm-btn adm-btn-primary" onClick={openCreate}>
-          <Plus size={16} /> Thêm tài khoản
+          <Plus size={16} /> {t('admin.addUser')}
         </button>
       </div>
       <div className="adm-card">
         {loading ? (
-          <div className="adm-empty">Đang tải...</div>
+          <div className="adm-empty">{t('admin.userLoading')}</div>
         ) : items.length === 0 ? (
-          <div className="adm-empty">Chưa có người dùng nào.</div>
+          <div className="adm-empty">{t('admin.userEmpty')}</div>
         ) : (
           <table className="adm-table">
             <thead>
               <tr>
-                <th>Họ và tên</th>
-                <th>Email</th>
-                <th>Số điện thoại</th>
-                <th>Vai trò</th>
-                <th>Hành động</th>
+                <th>{t('admin.userFullName')}</th>
+                <th>{t('admin.userEmail')}</th>
+                <th>{t('admin.userPhone')}</th>
+                <th>{t('admin.userRole')}</th>
+                <th>{t('admin.userActions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -137,41 +139,44 @@ const AdminUsers = () => {
         <div className="adm-modal-overlay" onClick={close}>
           <div className="adm-modal" onClick={e => e.stopPropagation()}>
             <h3 className="adm-modal-title">
-              {modal === 'create' ? 'Thêm tài khoản' : 'Sửa tài khoản'}
+              {modal === 'create' ? t('admin.addUser') : t('admin.editUser')}
             </h3>
             <div className="adm-form-row">
               <div className="adm-form-group">
-                <label>Họ (First Name)</label>
+                <label>{t('admin.userFirstName')}</label>
                 <input value={form.firstName} onChange={e => setForm({ ...form, firstName: e.target.value })} />
               </div>
               <div className="adm-form-group">
-                <label>Tên (Last Name)</label>
+                <label>{t('admin.userLastName')}</label>
                 <input value={form.lastName} onChange={e => setForm({ ...form, lastName: e.target.value })} />
               </div>
             </div>
             <div className="adm-form-group">
-              <label>Email</label>
+              <label>{t('admin.userEmail')}</label>
               <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} disabled={modal !== 'create'} />
             </div>
             <div className="adm-form-group">
-              <label>Số điện thoại</label>
+              <label>{t('admin.userPhone')}</label>
               <input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
             </div>
             <div className="adm-form-group">
-              <label>Mật khẩu {modal !== 'create' && '(để trống nếu không đổi)'}</label>
+              <label>
+                {t('admin.userPassword')}{' '}
+                {modal !== 'create' && t('admin.userPasswordPlaceholder')}
+              </label>
               <input type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} />
             </div>
             <div className="adm-form-group">
-              <label>Vai trò</label>
+              <label>{t('admin.userRole')}</label>
               <select value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}>
                 <option value="USER">USER</option>
                 <option value="ADMIN">ADMIN</option>
               </select>
             </div>
             <div className="adm-modal-actions">
-              <button className="adm-btn adm-btn-outline" onClick={close}>Hủy</button>
+              <button className="adm-btn adm-btn-outline" onClick={close}>{t('admin.cancel')}</button>
               <button className="adm-btn adm-btn-primary" onClick={handleSave} disabled={saving}>
-                {saving ? 'Đang lưu...' : 'Lưu'}
+                {saving ? t('admin.saving') : t('admin.save')}
               </button>
             </div>
           </div>
