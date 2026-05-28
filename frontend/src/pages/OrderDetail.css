@@ -170,23 +170,29 @@
   padding: 4px 10px;
   text-align: right;
 }
-.od-status-order_received,
+.od-status-order_received {
+  background: #fef9c3;
+  color: #854d0e;
+}
 .od-status-processing {
-  background: #fff7ed;
+  background: #ffedd5;
   color: #c2410c;
 }
 .od-status-on_the_way {
-  background: #eff6ff;
+  background: #dbeafe;
   color: #1d4ed8;
 }
-.od-status-delivered,
+.od-status-delivered {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
 .od-status-completed {
-  background: #f0fdf4;
-  color: #15803d;
+  background: #d1fae5;
+  color: #065f46;
 }
 .od-status-cancelled {
-  background: #fef2f2;
-  color: #b91c1c;
+  background: #fee2e2;
+  color: #991b1b;
 }
 .od-summary-divider {
   height: 1px;

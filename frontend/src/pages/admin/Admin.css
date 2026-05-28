@@ -241,12 +241,12 @@
   font-weight: 600;
 }
 
-.adm-status-order_received { background: #fff3e0; color: #e65100; }
-.adm-status-processing { background: #fff3cd; color: #856404; }
-.adm-status-on_the_way { background: #cce5ff; color: #004085; }
-.adm-status-delivered { background: #e0f2f1; color: #004d40; }
-.adm-status-completed { background: #d4edda; color: #155724; }
-.adm-status-cancelled { background: #f8d7da; color: #721c24; }
+.adm-status-order_received { background: #fef9c3; color: #854d0e; }
+.adm-status-processing { background: #ffedd5; color: #c2410c; }
+.adm-status-on_the_way { background: #dbeafe; color: #1d4ed8; }
+.adm-status-delivered { background: #f3e8ff; color: #6b21a8; }
+.adm-status-completed { background: #d1fae5; color: #065f46; }
+.adm-status-cancelled { background: #fee2e2; color: #991b1b; }
 .adm-status-pending { background: #e2e3e5; color: #383d41; }
 
 /* ── File input ── */

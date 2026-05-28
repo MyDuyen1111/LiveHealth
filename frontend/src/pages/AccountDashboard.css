@@ -153,26 +153,29 @@
   font-size: 12px;
   font-weight: 600;
 }
-.dash-status--order_received,
+.dash-status--order_received {
+  color: #854d0e;
+  background: #fef9c3;
+}
 .dash-status--processing {
-  color: #ff9800;
-  background: #fff3e0;
+  color: #c2410c;
+  background: #ffedd5;
 }
 .dash-status--on_the_way {
-  color: #2196f3;
-  background: #e3f2fd;
+  color: #1d4ed8;
+  background: #dbeafe;
 }
 .dash-status--delivered {
-  color: #009688;
-  background: #e0f2f1;
+  color: #6b21a8;
+  background: #f3e8ff;
 }
 .dash-status--completed {
-  color: #4caf50;
-  background: #e8f5e9;
+  color: #065f46;
+  background: #d1fae5;
 }
 .dash-status--cancelled {
-  color: #f44336;
-  background: #ffebee;
+  color: #991b1b;
+  background: #fee2e2;
 }
 .dash-view-detail {
   font-size: 13px;
