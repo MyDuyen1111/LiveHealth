@@ -164,3 +164,9 @@ export const adminWebInfoApi = {
     return postForm('/web-information/logo', fd);
   },
 };
+
+// ─── Dashboard Stats ───
+export const adminDashboardApi = {
+  getStats: () => get('/admin/dashboard/stats'),
+};
+

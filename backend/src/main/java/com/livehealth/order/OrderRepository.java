@@ -50,4 +50,17 @@ public class OrderRepository extends BaseRepository<Order, UUID> {
         List<Order> list = query.getResultList();
         return new PageImpl<>(list, pageable != null ? pageable : PageRequest.of(0, list.isEmpty() ? 1 : list.size()), total);
     }
+
+    public Double calculateTotalRevenue() {
+        Double revenue = em.createQuery("SELECT SUM(o.totalAmount) FROM Order o WHERE o.status != :status", Double.class)
+                .setParameter("status", OrderStatus.CANCELLED)
+                .getSingleResult();
+        return revenue != null ? revenue : 0.0;
+    }
+
+    public List<Order> findRecentOrders(int limit) {
+        return em.createQuery("SELECT o FROM Order o ORDER BY o.orderDate DESC", Order.class)
+                .setMaxResults(limit)
+                .getResultList();
+    }
 }
