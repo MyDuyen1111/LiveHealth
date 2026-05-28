@@ -23,6 +23,7 @@ import Faq from './pages/Faq';
 import PaymentPage from './pages/PaymentPage';
 import PaymentReturn from './pages/PaymentReturn';
 import ForgotPassword from './pages/ForgotPassword';
+import Wishlist from './pages/Wishlist';
 import CartSidebar from './components/CartSidebar';
 import { useAuth } from './context/AuthContext';
 
@@ -42,6 +43,7 @@ import AdminOrders from './pages/admin/AdminOrders';
 import AdminShipping from './pages/admin/AdminShipping';
 import AdminPayment from './pages/admin/AdminPayment';
 import AdminUsers from './pages/admin/AdminUsers';
+import AdminContacts from './pages/admin/AdminContacts';
 
 // Protected route wrapper
 function ProtectedRoute({ children }) {
@@ -79,6 +81,7 @@ function App() {
         <Route path="shipping" element={<AdminShipping />} />
         <Route path="payment" element={<AdminPayment />} />
         <Route path="users" element={<AdminUsers />} />
+        <Route path="contacts" element={<AdminContacts />} />
       </Route>
 
       {/* Customer routes */}
@@ -103,6 +106,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/account" element={<ProtectedRoute><AccountDashboard /></ProtectedRoute>} />
               <Route path="/account/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
               <Route path="/account/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />

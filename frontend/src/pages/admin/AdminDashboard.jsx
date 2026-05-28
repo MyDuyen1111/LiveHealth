@@ -46,7 +46,7 @@ const AdminDashboard = () => {
             <DollarSign size={24} />
           </div>
           <div className="adm-stat-info">
-            <span className="adm-stat-label">Doanh thu</span>
+            <span className="adm-stat-label">{t('admin.revenue')}</span>
             <span className="adm-stat-value">{formatPrice(stats?.totalRevenue || 0)}</span>
           </div>
         </div>
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
             <ShoppingBag size={24} />
           </div>
           <div className="adm-stat-info">
-            <span className="adm-stat-label">Đơn hàng</span>
+            <span className="adm-stat-label">{t('admin.ordersCount')}</span>
             <span className="adm-stat-value">{stats?.totalOrders || 0}</span>
           </div>
         </div>
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
             <Users size={24} />
           </div>
           <div className="adm-stat-info">
-            <span className="adm-stat-label">Người dùng</span>
+            <span className="adm-stat-label">{t('admin.usersCount')}</span>
             <span className="adm-stat-value">{stats?.totalUsers || 0}</span>
           </div>
         </div>
@@ -76,7 +76,7 @@ const AdminDashboard = () => {
             <Package size={24} />
           </div>
           <div className="adm-stat-info">
-            <span className="adm-stat-label">Sản phẩm</span>
+            <span className="adm-stat-label">{t('admin.productsCount')}</span>
             <span className="adm-stat-value">{stats?.totalProducts || 0}</span>
           </div>
         </div>
@@ -86,9 +86,9 @@ const AdminDashboard = () => {
       <div className="adm-dashboard-layout">
         <div className="adm-card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <h2 className="adm-dashboard-section-title" style={{ margin: 0 }}>Đơn hàng gần đây</h2>
+            <h2 className="adm-dashboard-section-title" style={{ margin: 0 }}>{t('admin.recentOrders')}</h2>
             <Link to="/admin/orders" style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#00B207', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>
-              Xem tất cả <ArrowRight size={14} />
+              {t('admin.viewAll')} <ArrowRight size={14} />
             </Link>
           </div>
 
@@ -98,11 +98,11 @@ const AdminDashboard = () => {
             <table className="adm-table">
               <thead>
                 <tr>
-                  <th>Mã đơn</th>
-                  <th>Ngày đặt</th>
-                  <th>Khách hàng</th>
-                  <th>Tổng cộng</th>
-                  <th>Trạng thái</th>
+                  <th>{t('admin.orderNumber')}</th>
+                  <th>{t('admin.date')}</th>
+                  <th>{t('admin.customer')}</th>
+                  <th>{t('admin.total')}</th>
+                  <th>{t('admin.status')}</th>
                 </tr>
               </thead>
               <tbody>

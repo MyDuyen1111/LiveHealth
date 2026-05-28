@@ -332,3 +332,21 @@
   .od-header { flex-direction: column; gap: 12px; align-items: flex-start; }
   .od-header-actions { width: 100%; justify-content: space-between; }
 }
+
+.od-review-btn {
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  background: var(--green-light);
+  color: var(--green-dark);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.od-review-btn:hover {
+  background: var(--green);
+  color: var(--white);
+  border-color: var(--green);
+}

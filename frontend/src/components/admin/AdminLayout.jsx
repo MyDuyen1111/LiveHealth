@@ -24,6 +24,7 @@ const AdminLayout = () => {
     { to: '/admin/orders', icon: ShoppingCart, label: t('admin.orders') },
     { to: '/admin/shipping', icon: Truck, label: t('admin.shipping') },
     { to: '/admin/payment', icon: CreditCard, label: t('admin.payment') },
+    { to: '/admin/contacts', icon: MessageSquareQuote, label: t('admin.contactMessages') },
   ];
 
   return (

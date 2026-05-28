@@ -8,6 +8,7 @@ import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -17,6 +18,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @Path("/api/v1/contact")
@@ -28,6 +31,9 @@ public class ContactController {
     @Inject
     Mailer mailer;
 
+    @Inject
+    ContactMessageRepository contactMessageRepository;
+
     @ConfigProperty(name = "app.admin.email", defaultValue = "admin@livehealth.com")
     String adminEmail;
 
@@ -35,10 +41,22 @@ public class ContactController {
     String mailUsername;
 
     @POST
+    @Transactional(rollbackOn = Exception.class)
     public Response sendContactMessage(@Valid ContactRequestDto request) {
         log.info("Received contact message from: {} <{}>. Subject: {}", 
                  request.getName(), request.getEmail(), request.getSubject());
         
+        // Persist to database
+        ContactMessage contactMessage = ContactMessage.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .subject(request.getSubject())
+                .message(request.getMessage())
+                .status("PENDING")
+                .createdAt(LocalDateTime.now())
+                .build();
+        contactMessageRepository.save(contactMessage);
+
         // Build email body
         String body = String.format(
             "Bạn nhận được một tin nhắn liên hệ mới từ website LiveHealth:\n\n" +

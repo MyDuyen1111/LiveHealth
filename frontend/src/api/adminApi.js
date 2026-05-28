@@ -179,4 +179,12 @@ export const adminUserApi = {
   delete: (id) => del(`/admin/delete-user/${id}`),
 };
 
+// ─── Contact Messages ───
+export const adminContactApi = {
+  getAll: (pageNum = 1, pageSize = 20) => get('/admin/contacts', { pageNum, pageSize }),
+  getById: (id) => get(`/admin/contacts/${id}`),
+  reply: (id, reply) => post(`/admin/contacts/${id}/reply`, { reply }),
+};
+
+
 

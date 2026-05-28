@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { ChevronDown, Leaf, Menu, PhoneCall, Search, ShoppingBag, User } from 'lucide-react';
+import { ChevronDown, Leaf, Menu, PhoneCall, Search, ShoppingBag, User, Heart } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useLang } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
+import { useWishlist } from '../../context/WishlistContext';
 import { categoryApi } from '../../api/categoryApi';
 import { formatPrice } from '../../utils/format';
 import './Header.css';
@@ -12,6 +13,7 @@ const Header = () => {
   const { cartCount, cartTotal, openCart } = useCart();
   const { lang, setLang, t } = useLang();
   const { isAuthenticated, user } = useAuth();
+  const { wishlist } = useWishlist();
   const [catOpen, setCatOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -81,7 +83,43 @@ const Header = () => {
             <button className="h-search-btn" type="submit">{t('header.searchBtn')}</button>
           </form>
 
-          <div className="h-actions">
+          <div className="h-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <Link to="/wishlist" className="h-action-wishlist" style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '42px',
+              height: '42px',
+              borderRadius: '50%',
+              border: '1px solid var(--gray-200)',
+              background: 'var(--white)',
+              color: '#ea4335',
+              boxShadow: 'var(--shadow-sm)',
+              position: 'relative',
+              transition: 'border-color 0.2s, box-shadow 0.2s, transform 0.2s'
+            }}>
+              <Heart size={20} fill={wishlist.length > 0 ? '#ea4335' : 'none'} />
+              {wishlist.length > 0 && (
+                <span className="h-wishlist-badge" style={{
+                  position: 'absolute',
+                  top: '-5px',
+                  right: '-5px',
+                  background: '#ea4335',
+                  color: 'white',
+                  borderRadius: '999px',
+                  minWidth: '18px',
+                  height: '18px',
+                  padding: '0 5px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '10px',
+                  fontWeight: '800',
+                  border: '2px solid var(--white)'
+                }}>{wishlist.length}</span>
+              )}
+            </Link>
+
             <button className="h-action-cart" onClick={openCart} type="button">
               <div className="h-cart-icon">
                 <ShoppingBag size={24}/>

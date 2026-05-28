@@ -68,9 +68,9 @@ const AdminOrders = () => {
                 <th>{t('admin.date')}</th>
                 <th>{t('admin.customer')}</th>
                 <th>{t('admin.total')}</th>
-                <th>{t('admin.status')}</th>
+                <th>{t('admin.orderStatus')}</th>
                 <th>{t('admin.updateStatus')}</th>
-                <th>Hành động</th>
+                <th>{t('admin.actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -96,7 +96,7 @@ const AdminOrders = () => {
                   </td>
                   <td>
                     <button className="adm-btn adm-btn-outline adm-btn-sm" onClick={() => openDetail(o.id)}>
-                      Xem chi tiết
+                      {t('admin.viewDetails')}
                     </button>
                   </td>
                 </tr>
@@ -123,41 +123,41 @@ const AdminOrders = () => {
         <div className="adm-modal-overlay" onClick={() => setDetailModal(null)}>
           <div className="adm-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 800 }}>
             <h3 className="adm-modal-title">
-              Chi tiết đơn hàng #{detailModal.orderNumber}
+              {t('admin.orderDetails')} #{detailModal.orderNumber}
             </h3>
             
             <div className="adm-detail-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
               <div>
                 <h4 style={{ borderBottom: '1px solid #eee', paddingBottom: 6, marginBottom: 10, fontSize: 14, color: '#333' }}>
-                  Thông tin khách hàng
+                  {t('admin.customerInfo')}
                 </h4>
-                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>Họ tên:</strong> {detailModal.billingAddress?.firstName || ''} {detailModal.billingAddress?.lastName || 'Khách hàng'}</p>
-                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>Email liên hệ:</strong> {detailModal.contactEmail || '—'}</p>
-                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>SĐT liên hệ:</strong> {detailModal.contactPhone || '—'}</p>
-                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>Hình thức thanh toán:</strong> {detailModal.paymentMethodName || detailModal.paymentMethod?.name || 'COD'}</p>
+                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.fullName')}:</strong> {detailModal.billingAddress?.firstName || ''} {detailModal.billingAddress?.lastName || t('admin.customer')}</p>
+                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.contactEmail')}:</strong> {detailModal.contactEmail || '—'}</p>
+                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.contactPhone')}:</strong> {detailModal.contactPhone || '—'}</p>
+                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.paymentMethod')}:</strong> {detailModal.paymentMethodName || detailModal.paymentMethod?.name || 'COD'}</p>
               </div>
               <div>
                 <h4 style={{ borderBottom: '1px solid #eee', paddingBottom: 6, marginBottom: 10, fontSize: 14, color: '#333' }}>
-                  Địa chỉ giao hàng
+                  {t('admin.shippingAddress')}
                 </h4>
-                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>Địa chỉ:</strong> {detailModal.shippingAddress?.streetAddress || detailModal.shippingAddress?.street || '—'}</p>
-                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>Thành phố / Tỉnh:</strong> {detailModal.shippingAddress?.state || detailModal.shippingAddress?.city || '—'}</p>
-                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>Quốc gia:</strong> {detailModal.shippingAddress?.country || '—'}</p>
-                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>Ghi chú:</strong> {detailModal.note || 'Không có'}</p>
+                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.address')}:</strong> {detailModal.shippingAddress?.streetAddress || detailModal.shippingAddress?.street || '—'}</p>
+                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.cityState')}:</strong> {detailModal.shippingAddress?.state || detailModal.shippingAddress?.city || '—'}</p>
+                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.country')}:</strong> {detailModal.shippingAddress?.country || '—'}</p>
+                <p style={{ margin: '6px 0', fontSize: 13 }}><strong>{t('admin.note')}:</strong> {detailModal.note || t('admin.noNotes')}</p>
               </div>
             </div>
 
             <h4 style={{ borderBottom: '1px solid #eee', paddingBottom: 6, marginBottom: 10, fontSize: 14, color: '#333' }}>
-              Danh sách sản phẩm
+              {t('admin.productList')}
             </h4>
             <div style={{ maxHeight: 200, overflowY: 'auto', marginBottom: 20 }}>
               <table className="adm-table" style={{ width: '100%' }}>
                 <thead>
                   <tr>
-                    <th>Sản phẩm</th>
-                    <th style={{ textAlign: 'center' }}>Đơn giá</th>
-                    <th style={{ textAlign: 'center' }}>Số lượng</th>
-                    <th style={{ textAlign: 'right' }}>Thành tiền</th>
+                    <th>{t('wishlist.product')}</th>
+                    <th style={{ textAlign: 'center' }}>{t('admin.unitPrice')}</th>
+                    <th style={{ textAlign: 'center' }}>{t('admin.quantity')}</th>
+                    <th style={{ textAlign: 'right' }}>{t('admin.subtotalCol')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -181,18 +181,18 @@ const AdminOrders = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, borderTop: '1px solid #eee', paddingTop: 15, marginBottom: 20 }}>
-              <div style={{ fontSize: 13 }}>Tạm tính: <strong>{formatPrice(detailModal.subtotal || 0)}</strong></div>
-              <div style={{ fontSize: 13 }}>Phí vận chuyển: <strong>{formatPrice(detailModal.shippingFee || detailModal.shippingCost || 0)}</strong></div>
+              <div style={{ fontSize: 13 }}>{t('admin.subtotal')}: <strong>{formatPrice(detailModal.subtotal || 0)}</strong></div>
+              <div style={{ fontSize: 13 }}>{t('admin.shippingFee')}: <strong>{formatPrice(detailModal.shippingFee || detailModal.shippingCost || 0)}</strong></div>
               {detailModal.discountPercentage > 0 && (
-                <div style={{ fontSize: 13 }}>Giảm giá: <strong>{detailModal.discountPercentage}%</strong></div>
+                <div style={{ fontSize: 13 }}>{t('admin.discount')}: <strong>{detailModal.discountPercentage}%</strong></div>
               )}
               <div style={{ fontSize: 16, fontWeight: 'bold', color: 'var(--green)' }}>
-                Tổng cộng: {formatPrice(detailModal.totalAmount || 0)}
+                {t('admin.total')}: {formatPrice(detailModal.totalAmount || 0)}
               </div>
             </div>
 
             <div className="adm-modal-actions">
-              <button className="adm-btn adm-btn-outline" onClick={() => setDetailModal(null)}>Đóng</button>
+              <button className="adm-btn adm-btn-outline" onClick={() => setDetailModal(null)}>{t('admin.close')}</button>
             </div>
           </div>
         </div>

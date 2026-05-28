@@ -63,6 +63,9 @@
   opacity: 0;
   transform: translateY(-6px);
   transition: opacity .2s, transform .2s;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .pc:hover .pc-hover-icons {

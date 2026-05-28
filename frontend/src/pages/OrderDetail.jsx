@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Check, Star } from 'lucide-react';
 import { useLang } from '../context/LanguageContext';
 import { orderApi } from '../api/orderApi';
+import { reviewApi } from '../api/reviewApi';
 import { formatPrice } from '../utils/format';
 import AccountSidebar from '../components/AccountSidebar';
 import './OrderDetail.css';
@@ -36,6 +37,11 @@ const OrderDetail = () => {
   const [canceling, setCanceling] = useState(false);
   const [cancelMessage, setCancelMessage] = useState('');
   const [cancelError, setCancelError] = useState('');
+  
+  const [reviewProduct, setReviewProduct] = useState(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+  const [submittingReview, setSubmittingReview] = useState(false);
 
   useEffect(() => {
     orderApi.getOrderById(id)
@@ -58,6 +64,7 @@ const OrderDetail = () => {
   const subtotal = order.subtotal ?? items.reduce((sum, item) => sum + (item.subtotal || 0), 0);
   const shippingFee = order.shippingFee ?? order.shippingCost ?? 0;
   const canCancel = cancellableStatuses.includes(order.status);
+  const showReviewAction = order.status === 'DELIVERED' || order.status === 'COMPLETED';
 
   const handleCancelOrder = async () => {
     if (!window.confirm(t('orderDetail.cancelConfirm'))) return;
@@ -75,6 +82,22 @@ const OrderDetail = () => {
       setCancelError(t(err.message) || err.message || t('orderDetail.cancelError'));
     } finally {
       setCanceling(false);
+    }
+  };
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    if (!reviewProduct) return;
+    setSubmittingReview(true);
+    try {
+      const pId = reviewProduct.productId || reviewProduct.id;
+      await reviewApi.createReview(pId, rating, comment);
+      alert(t('review.success'));
+      setReviewProduct(null);
+    } catch (err) {
+      alert(err.message || t('review.error'));
+    } finally {
+      setSubmittingReview(false);
     }
   };
 
@@ -159,18 +182,44 @@ const OrderDetail = () => {
 
             <div className="od-products-table-wrap">
               <table className="od-products-table">
-                <thead><tr><th>{t('orderDetail.product')}</th><th>{t('orderDetail.price')}</th><th>{t('orderDetail.quantity')}</th><th>{t('orderDetail.subtotalCol')}</th></tr></thead>
+                <thead>
+                  <tr>
+                    <th>{t('orderDetail.product')}</th>
+                    <th>{t('orderDetail.price')}</th>
+                    <th>{t('orderDetail.quantity')}</th>
+                    <th>{t('orderDetail.subtotalCol')}</th>
+                    {showReviewAction && <th>{t('review.write')}</th>}
+                  </tr>
+                </thead>
                 <tbody>
                   {items.length > 0 ? items.map(item => (
                     <tr key={item.id || item.productId}>
-                      <td className="od-product-cell"><img src={item.productImageUrl || 'https://placehold.co/'} alt={item.productName}/><span>{item.productName}</span></td>
+                      <td className="od-product-cell">
+                        <img src={item.productImageUrl || 'https://placehold.co/'} alt={item.productName}/>
+                        <span>{item.productName}</span>
+                      </td>
                       <td>{formatPrice(item.price)}</td>
                       <td>x{item.quantity}</td>
                       <td className="od-subtotal-val">{formatPrice(item.subtotal)}</td>
+                      {showReviewAction && (
+                        <td>
+                          <button
+                            type="button"
+                            className="od-review-btn"
+                            onClick={() => {
+                              setReviewProduct(item);
+                              setRating(5);
+                              setComment('');
+                            }}
+                          >
+                            {t('review.write')}
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   )) : (
                     <tr>
-                      <td colSpan={4} className="od-empty-products">{t('orderDetail.noProducts')}</td>
+                      <td colSpan={showReviewAction ? 5 : 4} className="od-empty-products">{t('orderDetail.noProducts')}</td>
                     </tr>
                   )}
                 </tbody>
@@ -179,6 +228,73 @@ const OrderDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Review Modal */}
+      {reviewProduct && (
+        <div className="adm-modal-overlay" style={{ zIndex: 300 }} onClick={() => setReviewProduct(null)}>
+          <div className="adm-modal" style={{ maxWidth: 500 }} onClick={e => e.stopPropagation()}>
+            <h3 className="adm-modal-title">{t('review.write')}</h3>
+            <p style={{ fontSize: '13px', color: '#666', marginBottom: '15px' }}>{reviewProduct.productName}</p>
+            
+            <form onSubmit={handleReviewSubmit}>
+              <div style={{ marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '14px', fontWeight: '500' }}>{t('review.rating')}:</span>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      type="button"
+                      key={star}
+                      onClick={() => setRating(star)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                    >
+                      <Star size={24} fill={star <= rating ? '#FF8A00' : 'none'} color={star <= rating ? '#FF8A00' : '#DADADA'} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '6px' }}>{t('review.comment')}:</label>
+                <textarea
+                  value={comment}
+                  onChange={e => setComment(e.target.value)}
+                  placeholder="Viết nhận xét của bạn..."
+                  rows={4}
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: '8px',
+                    border: '1px solid #d0d5dd',
+                    fontSize: '14px',
+                    outline: 'none',
+                    fontFamily: 'inherit',
+                    resize: 'vertical'
+                  }}
+                  required
+                />
+              </div>
+
+              <div className="adm-modal-actions">
+                <button 
+                  type="button" 
+                  className="adm-btn adm-btn-outline" 
+                  onClick={() => setReviewProduct(null)}
+                  disabled={submittingReview}
+                >
+                  {t('admin.close')}
+                </button>
+                <button 
+                  type="submit" 
+                  className="adm-btn" 
+                  disabled={submittingReview}
+                >
+                  {submittingReview ? 'Đang gửi...' : t('review.submit')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
