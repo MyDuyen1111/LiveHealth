@@ -5,7 +5,7 @@ import { formatPrice } from '../../utils/format';
 import { useLang } from '../../context/LanguageContext';
 import './Admin.css';
 
-const statuses = ['PENDING','PROCESSING','ON_THE_WAY','DELIVERED','COMPLETED'];
+const statuses = ['ORDER_RECEIVED','PROCESSING','ON_THE_WAY','DELIVERED','COMPLETED','CANCELLED'];
 
 const AdminOrders = () => {
   const [items,setItems]=useState([]); const [page,setPage]=useState(1); const [totalPages,setTotalPages]=useState(1);
