@@ -18,7 +18,6 @@ public interface AuthMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "address", ignore = true)
     @Mapping(target = "userHealth", ignore = true)
-    @Mapping(target = "phone", ignore = true)
     @Mapping(target = "linkAvatar", ignore = true)
     @Mapping(target = "avatarPublicId", ignore = true)
     User registerRequestDtoToUser(RegisterRequestDto request);

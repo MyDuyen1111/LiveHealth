@@ -20,6 +20,7 @@ const Register = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPw, setConfirmPw] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -52,6 +53,7 @@ const Register = () => {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       email: email.trim(),
+      phone: phone.trim(),
       password,
       reEnterPassword: confirmPw,
       acceptedTerms,
@@ -156,6 +158,16 @@ const Register = () => {
                     placeholder={t('register.email')}
                     value={email}
                     onChange={e => { setEmail(e.target.value); setError(''); }}
+                    required
+                  />
+                </div>
+
+                <div className="auth-field">
+                  <input
+                    type="tel"
+                    placeholder={t('checkout.phone')}
+                    value={phone}
+                    onChange={e => { setPhone(e.target.value); setError(''); }}
                     required
                   />
                 </div>

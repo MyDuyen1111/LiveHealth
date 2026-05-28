@@ -39,6 +39,9 @@ public class RegisterRequestDto {
     @NotBlank(message = ErrorMessage.INVALID_SOME_THING_FIELD_IS_REQUIRED)
     String reEnterPassword;
 
+    @Schema(description = "Số điện thoại", example = "0901234567")
+    String phone;
+
     @Schema(description = "Đồng ý điều khoản", example = "true")
     @AssertTrue(message = ErrorMessage.INVALID_SOME_THING_FIELD_IS_REQUIRED)
     boolean acceptedTerms;
