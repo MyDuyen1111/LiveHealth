@@ -292,18 +292,25 @@ public class PaymentServiceImpl implements PaymentService {
     Collections.sort(fieldNames);
     StringBuilder hashData = new StringBuilder();
     StringBuilder query = new StringBuilder();
-    Iterator<String> itr = fieldNames.iterator();
-    while (itr.hasNext()) {
-      String fieldName = itr.next();
+    boolean first = true;
+    for (String fieldName : fieldNames) {
       String fieldValue = vnpParams.get(fieldName);
       if (fieldValue != null && !fieldValue.isEmpty()) {
-        hashData.append(fieldName).append('=')
-            .append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
-        query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII)).append('=')
-            .append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
-        if (itr.hasNext()) {
-          query.append('&');
-          hashData.append('&');
+        try {
+          String encodedKey = URLEncoder.encode(fieldName, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+          String encodedValue = URLEncoder.encode(fieldValue, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+
+          if (!first) {
+            query.append('&');
+            hashData.append('&');
+          }
+
+          hashData.append(fieldName).append('=').append(encodedValue);
+          query.append(encodedKey).append('=').append(encodedValue);
+
+          first = false;
+        } catch (Exception e) {
+          log.error("Encoding error in buildPaymentUrl: ", e);
         }
       }
     }
@@ -327,15 +334,20 @@ public class PaymentServiceImpl implements PaymentService {
     List<String> fieldNames = new ArrayList<>(fields.keySet());
     Collections.sort(fieldNames);
     StringBuilder hashData = new StringBuilder();
-    Iterator<String> itr = fieldNames.iterator();
-    while (itr.hasNext()) {
-      String fieldName = itr.next();
+    boolean first = true;
+    for (String fieldName : fieldNames) {
       String fieldValue = fields.get(fieldName);
       if (fieldValue != null && !fieldValue.isEmpty()) {
-        hashData.append(fieldName).append('=')
-            .append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
-        if (itr.hasNext())
-          hashData.append('&');
+        try {
+          String encodedValue = URLEncoder.encode(fieldValue, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+          if (!first) {
+            hashData.append('&');
+          }
+          hashData.append(fieldName).append('=').append(encodedValue);
+          first = false;
+        } catch (Exception e) {
+          log.error("Encoding error in hashAllFields: ", e);
+        }
       }
     }
     return vnPayConfig.hmacSHA512(vnPayConfig.secretKey, hashData.toString());

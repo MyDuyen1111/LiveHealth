@@ -6,25 +6,30 @@ import io.quarkus.redis.datasource.set.SetCommands;
 import io.quarkus.redis.datasource.keys.KeyCommands;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.livehealth.auth.dto.request.otp.OtpRedisData;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Quarkus Redis wrapper — non-generic, uses String keys and Object values.
+ * Quarkus Redis wrapper — non-generic, uses String keys and String values internally
+ * with Jackson serialization for complex objects.
  * Callers cast the returned Object to the expected type.
  */
 @ApplicationScoped
 public class RedisTemplate {
 
-    private final ValueCommands<String, Object> valueCommands;
-    private final SetCommands<String, Object> setCommands;
+    private final ValueCommands<String, String> valueCommands;
+    private final SetCommands<String, String> setCommands;
     private final KeyCommands<String> keyCommands;
+    private final ObjectMapper objectMapper;
 
     @Inject
-    public RedisTemplate(RedisDataSource ds) {
-        this.valueCommands = ds.value(Object.class);
-        this.setCommands = ds.set(Object.class);
+    public RedisTemplate(RedisDataSource ds, ObjectMapper objectMapper) {
+        this.valueCommands = ds.value(String.class);
+        this.setCommands = ds.set(String.class);
         this.keyCommands = ds.key();
+        this.objectMapper = objectMapper;
     }
 
     public OpsForValue opsForValue() {
@@ -54,36 +59,89 @@ public class RedisTemplate {
     public class OpsForValue {
         public void set(String key, Object value) {
             if (key == null) return;
-            valueCommands.set(key, value);
+            try {
+                if (value instanceof String) {
+                    valueCommands.set(key, (String) value);
+                } else {
+                    valueCommands.set(key, objectMapper.writeValueAsString(value));
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Error serializing value to Redis", e);
+            }
         }
 
         public void set(String key, Object value, long timeout, TimeUnit unit) {
             if (key == null) return;
             long seconds = unit.toSeconds(timeout);
-            valueCommands.setex(key, seconds, value);
+            try {
+                if (value instanceof String) {
+                    valueCommands.setex(key, seconds, (String) value);
+                } else {
+                    valueCommands.setex(key, seconds, objectMapper.writeValueAsString(value));
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Error serializing value to Redis", e);
+            }
         }
 
         @SuppressWarnings("unchecked")
         public <V> V get(String key) {
             if (key == null) return null;
-            return (V) valueCommands.get(key);
+            String val = valueCommands.get(key);
+            if (val == null) return null;
+            String trimmed = val.trim();
+            if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+                try {
+                    return (V) objectMapper.readValue(val, OtpRedisData.class);
+                } catch (Exception e) {
+                    return (V) val;
+                }
+            }
+            return (V) val;
         }
     }
 
     public class OpsForSet {
         public Long add(String key, Object... values) {
             if (key == null || values == null || values.length == 0) return 0L;
-            return (long) setCommands.sadd(key, values);
+            String[] strValues = new String[values.length];
+            try {
+                for (int i = 0; i < values.length; i++) {
+                    if (values[i] instanceof String) {
+                        strValues[i] = (String) values[i];
+                    } else {
+                        strValues[i] = objectMapper.writeValueAsString(values[i]);
+                    }
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Error serializing set values to Redis", e);
+            }
+            return (long) setCommands.sadd(key, strValues);
         }
 
         public Long remove(String key, Object... values) {
             if (key == null || values == null || values.length == 0) return 0L;
-            return (long) setCommands.srem(key, values);
+            String[] strValues = new String[values.length];
+            try {
+                for (int i = 0; i < values.length; i++) {
+                    if (values[i] instanceof String) {
+                        strValues[i] = (String) values[i];
+                    } else {
+                        strValues[i] = objectMapper.writeValueAsString(values[i]);
+                    }
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Error serializing set values for removal from Redis", e);
+            }
+            return (long) setCommands.srem(key, strValues);
         }
 
+        @SuppressWarnings("unchecked")
         public Set<Object> members(String key) {
             if (key == null) return Set.of();
-            return setCommands.smembers(key);
+            Set<String> members = setCommands.smembers(key);
+            if (members == null) return Set.of();
+            return (Set) members;
         }
     }
 }

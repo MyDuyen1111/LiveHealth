@@ -124,15 +124,20 @@ public class PaymentController {
     List<String> fieldNames = new ArrayList<>(fields.keySet());
     Collections.sort(fieldNames);
     StringBuilder hashData = new StringBuilder();
-    Iterator<String> itr = fieldNames.iterator();
-    while (itr.hasNext()) {
-      String fieldName = itr.next();
+    boolean first = true;
+    for (String fieldName : fieldNames) {
       String fieldValue = fields.get(fieldName);
       if (fieldValue != null && !fieldValue.isEmpty()) {
-        hashData.append(fieldName).append('=')
-            .append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
-        if (itr.hasNext())
-          hashData.append('&');
+        try {
+          String encodedValue = URLEncoder.encode(fieldValue, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+          if (!first) {
+            hashData.append('&');
+          }
+          hashData.append(fieldName).append('=').append(encodedValue);
+          first = false;
+        } catch (Exception e) {
+          // ignore
+        }
       }
     }
     return vnPayConfig.hmacSHA512(vnPayConfig.secretKey, hashData.toString());

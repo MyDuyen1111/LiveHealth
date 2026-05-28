@@ -23,6 +23,8 @@ import com.livehealth.cart.CartRepository;
 import com.livehealth.order.OrderStatus;
 import com.livehealth.cart.CartRepository;
 import com.livehealth.product.ProductPromotion;
+import com.livehealth.product.Product;
+import com.livehealth.product.ProductRepository;
 import com.livehealth.user.Address;
 import com.livehealth.user.User;
 import com.livehealth.order.AddressOrderMapper;
@@ -60,6 +62,7 @@ public class OrderServiceImpl implements OrderService {
     CartRepository cartRepository;
     UserRepository userRepository;
     AddressRepository addressRepository;
+    ProductRepository productRepository;
     OrderMapper orderMapper;
     AddressOrderMapper addressOrderMapper;
     CartService cartService;
@@ -166,9 +169,16 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         for (CartItem item : cart.getItems()) {
+            Product product = item.getProduct();
+            if (product.getStock() < item.getQuantity()) {
+                throw new VsException(HttpStatus.BAD_REQUEST, ErrorMessage.Cart.ERR_PRODUCT_QUANTITY_EXCEEDED);
+            }
+            product.setStock(product.getStock() - item.getQuantity());
+            productRepository.save(product);
+
             OrderItem orderItem = OrderItem.builder()
                     .order(order)
-                    .product(item.getProduct())
+                    .product(product)
                     .quantity(item.getQuantity())
                     .price(item.getPrice())
                     .subtotal(item.getPrice() * item.getQuantity())
