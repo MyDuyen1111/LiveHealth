@@ -41,6 +41,7 @@ import AdminMembers from './pages/admin/AdminMembers';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminShipping from './pages/admin/AdminShipping';
 import AdminPayment from './pages/admin/AdminPayment';
+import AdminUsers from './pages/admin/AdminUsers';
 
 // Protected route wrapper
 function ProtectedRoute({ children }) {
@@ -77,6 +78,7 @@ function App() {
         <Route path="orders" element={<AdminOrders />} />
         <Route path="shipping" element={<AdminShipping />} />
         <Route path="payment" element={<AdminPayment />} />
+        <Route path="users" element={<AdminUsers />} />
       </Route>
 
       {/* Customer routes */}

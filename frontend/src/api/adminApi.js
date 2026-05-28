@@ -170,3 +170,13 @@ export const adminDashboardApi = {
   getStats: () => get('/admin/dashboard/stats'),
 };
 
+// ─── Users ───
+export const adminUserApi = {
+  getAll: (pageNum = 1, pageSize = 20) => get('/admin/users', { pageNum, pageSize }),
+  getById: (id) => get(`/admin/users/${id}`),
+  create: (data) => post('/admin/create-user', data),
+  update: (id, data) => put(`/admin/update-user/${id}`, data),
+  delete: (id) => del(`/admin/delete-user/${id}`),
+};
+
+

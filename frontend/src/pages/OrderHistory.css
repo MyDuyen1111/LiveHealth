@@ -61,12 +61,30 @@
   border-bottom: 1px solid var(--gray-100);
 }
 .oh-status {
-  font-size: 13px;
-  font-weight: 500;
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
 }
-.oh-status--processing { color: var(--orange); }
-.oh-status--onTheWay { color: #2196f3; }
-.oh-status--completed { color: var(--green); }
+.oh-status--order_received,
+.oh-status--processing {
+  color: #ff9800;
+  background: #fff3e0;
+}
+.oh-status--on_the_way {
+  color: #2196f3;
+  background: #e3f2fd;
+}
+.oh-status--delivered,
+.oh-status--completed {
+  color: #4caf50;
+  background: #e8f5e9;
+}
+.oh-status--cancelled {
+  color: #f44336;
+  background: #ffebee;
+}
 .oh-view-detail {
   font-size: 13px;
   color: var(--green);

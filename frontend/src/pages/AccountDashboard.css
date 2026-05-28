@@ -147,12 +147,30 @@
   border-bottom: 1px solid var(--gray-100);
 }
 .dash-status {
-  font-size: 13px;
-  font-weight: 500;
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
 }
-.dash-status--processing { color: var(--orange); }
-.dash-status--onTheWay { color: #2196f3; }
-.dash-status--completed { color: var(--green); }
+.dash-status--order_received,
+.dash-status--processing {
+  color: #ff9800;
+  background: #fff3e0;
+}
+.dash-status--on_the_way {
+  color: #2196f3;
+  background: #e3f2fd;
+}
+.dash-status--delivered,
+.dash-status--completed {
+  color: #4caf50;
+  background: #e8f5e9;
+}
+.dash-status--cancelled {
+  color: #f44336;
+  background: #ffebee;
+}
 .dash-view-detail {
   font-size: 13px;
   color: var(--green);

@@ -20,6 +20,7 @@ const AdminLayout = () => {
     { to: '/admin/news-tags', icon: Tag, label: t('admin.newsTags') },
     { to: '/admin/testimonials', icon: MessageSquareQuote, label: t('admin.testimonials') },
     { to: '/admin/members', icon: Users, label: t('admin.members') },
+    { to: '/admin/users', icon: Users, label: t('admin.users') },
     { to: '/admin/orders', icon: ShoppingCart, label: t('admin.orders') },
     { to: '/admin/shipping', icon: Truck, label: t('admin.shipping') },
     { to: '/admin/payment', icon: CreditCard, label: t('admin.payment') },

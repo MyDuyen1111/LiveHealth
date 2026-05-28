@@ -7,10 +7,15 @@ import com.livehealth.shared.constant.UrlConstant;
 import com.livehealth.user.dto.request.user.personalInformation.PersonalInformationRequestDto;
 import com.livehealth.user.dto.request.user.profile.UpdateProfileRequestDto;
 import com.livehealth.user.dto.request.user.profile.ChangePasswordRequestDto;
+import com.livehealth.user.dto.request.admin.CreateUserRequestDto;
+import com.livehealth.user.dto.request.admin.UpdateUserRequestDto;
+import com.livehealth.shared.dto.pagination.PaginationRequestDto;
+import com.livehealth.shared.dto.pagination.PaginationResponseDto;
 import com.livehealth.user.dto.response.user.UserResponseDto;
 import com.livehealth.shared.dto.CommonResponseDto;
 import com.livehealth.shared.security.SecurityUtils;
 import com.livehealth.user.UserService;
+import com.livehealth.shared.base.HttpStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -92,6 +97,50 @@ public class UserController {
                         @Valid ChangePasswordRequestDto request) {
                 UUID userId = SecurityUtils.getCurrentUserId();
                 CommonResponseDto response = userService.changePassword(userId, request);
+                return VsResponseUtil.success(response);
+        }
+
+        // ==================== ADMIN ====================
+
+        @Operation(summary = "Lấy danh sách tất cả user", description = "Admin lấy danh sách tất cả người dùng có phân trang", security = @SecurityRequirement(name = "Bearer Token"))
+        @GET
+        @Path(UrlConstant.Admin.GET_USERS)
+        public Response getAllUsers(@BeanParam PaginationRequestDto request) {
+                PaginationResponseDto<UserResponseDto> response = userService.getAllUsers(request);
+                return VsResponseUtil.success(response);
+        }
+
+        @Operation(summary = "Lấy chi tiết user", description = "Admin lấy thông tin chi tiết một người dùng theo ID", security = @SecurityRequirement(name = "Bearer Token"))
+        @GET
+        @Path(UrlConstant.Admin.GET_USER)
+        public Response getUserById(@PathParam("userId") UUID userId) {
+                UserResponseDto response = userService.getUserById(userId);
+                return VsResponseUtil.success(response);
+        }
+
+        @Operation(summary = "Tạo user mới", description = "Admin tạo tài khoản người dùng mới", security = @SecurityRequirement(name = "Bearer Token"))
+        @POST
+        @Path(UrlConstant.Admin.CREATE_USER)
+        public Response createUser(@Valid CreateUserRequestDto request) {
+                UserResponseDto response = userService.createUser(request);
+                return VsResponseUtil.success(HttpStatus.CREATED, response);
+        }
+
+        @Operation(summary = "Cập nhật thông tin user", description = "Admin cập nhật thông tin người dùng", security = @SecurityRequirement(name = "Bearer Token"))
+        @PUT
+        @Path(UrlConstant.Admin.UPDATE_USER)
+        public Response updateUser(
+                        @PathParam("userId") UUID userId,
+                        @Valid UpdateUserRequestDto request) {
+                UserResponseDto response = userService.updateUser(userId, request);
+                return VsResponseUtil.success(response);
+        }
+
+        @Operation(summary = "Xóa tài khoản user", description = "Admin xóa tài khoản người dùng", security = @SecurityRequirement(name = "Bearer Token"))
+        @DELETE
+        @Path(UrlConstant.Admin.DELETE_USER)
+        public Response deleteUser(@PathParam("userId") UUID userId) {
+                CommonResponseDto response = userService.deleteUserAccount(userId);
                 return VsResponseUtil.success(response);
         }
 }

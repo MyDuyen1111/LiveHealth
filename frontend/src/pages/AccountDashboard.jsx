@@ -19,12 +19,7 @@ const AccountDashboard = () => {
   }, []);
 
   const getStatusLabel = (status) => {
-    switch (status) {
-      case 'PROCESSING': return t('dashboard.processing');
-      case 'ON_THE_WAY': return t('dashboard.onTheWay');
-      case 'COMPLETED': case 'DELIVERED': return t('dashboard.completed');
-      default: return status;
-    }
+    return t(`orderDetail.status.${status}`) || status;
   };
 
   return (
