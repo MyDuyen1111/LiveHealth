@@ -57,12 +57,17 @@ login_res = api_request("/auth/login", method="POST", data={
 TOKEN = login_res["data"]["accessToken"]
 print(" ✅ Login successful.")
 
-print("\n🧹 Cleaning existing product tables...")
+print("\n🧹 Cleaning existing product and order tables...")
 clean_sql = """
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE product_tag;
 TRUNCATE TABLE product_image;
 TRUNCATE TABLE product;
+TRUNCATE TABLE transaction;
+TRUNCATE TABLE order_item;
+TRUNCATE TABLE orders;
+TRUNCATE TABLE cart_item;
+TRUNCATE TABLE cart;
 SET FOREIGN_KEY_CHECKS = 1;
 """
 if run_sql(clean_sql):
