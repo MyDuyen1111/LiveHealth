@@ -162,7 +162,10 @@
   color: #2196f3;
   background: #e3f2fd;
 }
-.dash-status--delivered,
+.dash-status--delivered {
+  color: #009688;
+  background: #e0f2f1;
+}
 .dash-status--completed {
   color: #4caf50;
   background: #e8f5e9;

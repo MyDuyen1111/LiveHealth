@@ -76,7 +76,10 @@
   color: #2196f3;
   background: #e3f2fd;
 }
-.oh-status--delivered,
+.oh-status--delivered {
+  color: #009688;
+  background: #e0f2f1;
+}
 .oh-status--completed {
   color: #4caf50;
   background: #e8f5e9;
