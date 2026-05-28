@@ -26,7 +26,7 @@ import com.livehealth.shared.base.QuarkusMultipartFile;
 import java.util.UUID;
 
 @RestApiV1
-@Path("/api/v1/brands")
+@Path("/brands")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BrandController {
