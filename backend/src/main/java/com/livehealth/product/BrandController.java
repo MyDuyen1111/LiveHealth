@@ -64,6 +64,7 @@ public class BrandController {
     @Operation(summary = "Tải lên logo thương hiệu", description = "Dùng để admin tải lên logo cho thương hiệu", security = @SecurityRequirement(name = "Bearer Token"))
     @POST
     @Path("/{id}/logo")
+    @Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)
     public Response uploadBrandLogo(
             @PathParam("id") UUID id,
             @RestForm("file") FileUpload file) {

@@ -67,6 +67,7 @@ public class ProductController {
   @Operation(summary = "Tải lên ảnh sản phẩm", description = "Admin tải lên nhiều ảnh cho sản phẩm", security = @SecurityRequirement(name = "Bearer Token"))
   @POST
   @Path("/{id}/images")
+  @Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)
   public Response uploadImages(
       @PathParam("id") UUID id,
       @RestForm("file") List<FileUpload> files) {
