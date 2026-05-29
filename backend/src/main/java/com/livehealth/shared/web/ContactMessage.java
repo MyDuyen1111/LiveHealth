@@ -43,6 +43,10 @@ public class ContactMessage {
     @Column(nullable = false)
     String status; // "PENDING", "REPLIED"
 
+    @Builder.Default
+    @Column(nullable = false)
+    boolean userRead = false;
+
     @Column(nullable = false)
     LocalDateTime createdAt;
 }

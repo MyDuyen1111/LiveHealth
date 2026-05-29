@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
@@ -92,5 +93,16 @@ public class ContactController {
         }
         java.util.List<ContactMessage> messages = contactMessageRepository.findByEmailOrderByCreatedAtDesc(email);
         return VsResponseUtil.success(messages);
+    }
+
+    @PUT
+    @Path("/mark-read")
+    @Transactional(rollbackOn = Exception.class)
+    public Response markMyMessagesAsRead() {
+        String email = com.livehealth.shared.security.SecurityUtils.getCurrentEmail();
+        if (email != null && !email.isBlank()) {
+            contactMessageRepository.markMyMessagesAsRead(email);
+        }
+        return VsResponseUtil.success(new CommonResponseDto(HttpStatus.OK, "Đã đánh dấu tất cả phản hồi là đã đọc."));
     }
 }

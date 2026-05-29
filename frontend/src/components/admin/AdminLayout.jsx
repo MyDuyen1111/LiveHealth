@@ -1,13 +1,27 @@
+import { useState, useEffect } from 'react';
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import { Package, FolderTree, Tag, Bookmark, Newspaper, MessageSquareQuote, Users, ShoppingCart, Truck, CreditCard, LayoutDashboard, Globe, LogOut } from 'lucide-react';
 import { useLang } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
+import { get } from '../../api/apiClient';
 import { ToastProvider } from './Toast';
 import './AdminLayout.css';
 
 const AdminLayout = () => {
   const { lang, setLang, t } = useLang();
   const { user, logout } = useAuth();
+  const [pendingCount, setPendingCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCount = () => {
+      get('/admin/contacts/pending-count')
+        .then(res => setPendingCount(res || 0))
+        .catch(() => {});
+    };
+    fetchCount();
+    const interval = setInterval(fetchCount, 15000);
+    return () => clearInterval(interval);
+  }, []);
 
   const nav = [
     { to: '/admin', icon: LayoutDashboard, label: t('admin.dashboard'), end: true },
@@ -45,6 +59,21 @@ const AdminLayout = () => {
             >
               <item.icon size={18} />
               <span>{item.label}</span>
+              {item.to === '/admin/contacts' && pendingCount > 0 && (
+                <span className="adm-nav-badge" style={{
+                  background: '#ef4444',
+                  color: '#ffffff',
+                  fontSize: '11px',
+                  fontWeight: '700',
+                  padding: '2px 7px',
+                  borderRadius: '10px',
+                  marginLeft: 'auto',
+                  display: 'inline-block',
+                  lineHeight: '1.2'
+                }}>
+                  {pendingCount}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>

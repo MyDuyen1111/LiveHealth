@@ -84,6 +84,14 @@ public class AdminContactController {
         return VsResponseUtil.success(contactMessage);
     }
 
+    @Operation(summary = "Lấy số lượng tin nhắn chưa phản hồi", security = @SecurityRequirement(name = "Bearer Token"))
+    @GET
+    @Path("/pending-count")
+    public Response getPendingCount() {
+        long count = contactMessageRepository.countPendingMessages();
+        return VsResponseUtil.success(count);
+    }
+
     @Operation(summary = "Trả lời tin nhắn liên hệ", security = @SecurityRequirement(name = "Bearer Token"))
     @POST
     @Path("/{id}/reply")

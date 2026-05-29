@@ -46,7 +46,7 @@ const AccountDashboard = () => {
 
         <div className="dash-main">
           {/* Notification banner */}
-          {contacts.some(c => c.status === 'REPLIED') && (
+          {contacts.some(c => c.status === 'REPLIED' && !c.userRead) && (
             <div className="dash-notify-alert" style={{
               background: '#e8f5e9',
               borderLeft: '4px solid #2c742f',

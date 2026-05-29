@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLang } from '../context/LanguageContext';
-import { get } from '../api/apiClient';
+import { get, put } from '../api/apiClient';
 import AccountSidebar from '../components/AccountSidebar';
 import { Clock, MessageSquare, Send } from 'lucide-react';
 import './AccountContacts.css';
@@ -15,6 +15,9 @@ const AccountContacts = () => {
     get('/contact/my-messages')
       .then((res) => {
         setMessages(res || []);
+        if (res && res.some(c => c.status === 'REPLIED' && !c.userRead)) {
+          put('/contact/mark-read').catch(() => {});
+        }
       })
       .catch(() => {})
       .finally(() => setLoading(false));

@@ -19,4 +19,15 @@ public class ContactMessageRepository extends BaseRepository<ContactMessage, UUI
         .setParameter("email", email)
         .getResultList();
     }
+
+    public long countPendingMessages() {
+        return em.createQuery("SELECT COUNT(c) FROM ContactMessage c WHERE c.status = 'PENDING'", Long.class)
+                .getSingleResult();
+    }
+
+    public void markMyMessagesAsRead(String email) {
+        em.createQuery("UPDATE ContactMessage c SET c.userRead = true WHERE c.email = :email AND c.status = 'REPLIED'")
+                .setParameter("email", email)
+                .executeUpdate();
+    }
 }
