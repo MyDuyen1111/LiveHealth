@@ -3,7 +3,7 @@ package com.livehealth.payment;
 import com.livehealth.shared.config.VNPayConfig;
 import com.livehealth.shared.exception.VsException;
 import com.livehealth.shared.security.SecurityUtils;
-import jakarta.servlet.http.HttpServletRequest;
+import io.vertx.core.http.HttpServerRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,7 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
   // ─────────────────────────────────────────────────────────────
   @Override
   @Transactional(rollbackOn = Exception.class)
-  public String createPaymentUrl(long amount, HttpServletRequest request) {
+  public String createPaymentUrl(long amount, HttpServerRequest request) {
     String vnpTxnRef = vnPayConfig.getRandomNumber(8);
     String vnpIpAddr = vnPayConfig.getIpAddress(request);
     long amountInVND = amount * 100; // VNPay yêu cầu nhân 100
@@ -44,6 +44,11 @@ public class PaymentServiceImpl implements PaymentService {
       // anonymous payment — bỏ qua
     }
 
+    Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+    formatter.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh")); // Docker JVM mặc định UTC
+    String vnpCreateDate = formatter.format(cld.getTime());
+
     // Lưu giao dịch vào DB với trạng thái PENDING
     Transaction transaction = new Transaction();
     transaction.setVnpTxnRef(vnpTxnRef);
@@ -51,14 +56,14 @@ public class PaymentServiceImpl implements PaymentService {
     transaction.setAmount(amount);
     transaction.setStatus(TransactionStatus.PENDING);
     transaction.setUserId(userId);
+    transaction.setVnpTransactionDate(vnpCreateDate);
     transactionRepository.save(transaction);
     log.info("[VNPay] Created PENDING transaction: txnRef={}, amount={}", vnpTxnRef, amount);
-
     // Build params
     Map<String, String> vnpParams = new HashMap<>();
-    vnpParams.put("vnp_Version", vnPayConfig.vnp_Version);
-    vnpParams.put("vnp_Command", vnPayConfig.vnp_Command);
-    vnpParams.put("vnp_TmnCode", vnPayConfig.vnp_TmnCode);
+    vnpParams.put("vnp_Version", vnPayConfig.getVnp_Version());
+    vnpParams.put("vnp_Command", vnPayConfig.getVnp_Command());
+    vnpParams.put("vnp_TmnCode", vnPayConfig.getVnp_TmnCode());
     vnpParams.put("vnp_Amount", String.valueOf(amountInVND));
     vnpParams.put("vnp_CurrCode", "VND");
     vnpParams.put("vnp_BankCode", "NCB"); // Fix NCB cho Sandbox; FE có thể truyền lên
@@ -66,17 +71,9 @@ public class PaymentServiceImpl implements PaymentService {
     vnpParams.put("vnp_OrderInfo", transaction.getVnpOrderInfo());
     vnpParams.put("vnp_OrderType", "other");
     vnpParams.put("vnp_Locale", "vn");
-    vnpParams.put("vnp_ReturnUrl", vnPayConfig.vnp_ReturnUrl);
+    vnpParams.put("vnp_ReturnUrl", vnPayConfig.getVnp_ReturnUrl());
     vnpParams.put("vnp_IpAddr", vnpIpAddr);
-
-    Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-    formatter.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh")); // Docker JVM mặc định UTC
-    String vnpCreateDate = formatter.format(cld.getTime());
     vnpParams.put("vnp_CreateDate", vnpCreateDate);
-
-    transaction.setVnpTransactionDate(vnpCreateDate);
-    transactionRepository.save(transaction); // Save with the generated vnpTransactionDate
 
     cld.add(Calendar.MINUTE, 15);
     vnpParams.put("vnp_ExpireDate", formatter.format(cld.getTime()));
@@ -89,26 +86,26 @@ public class PaymentServiceImpl implements PaymentService {
   // ─────────────────────────────────────────────────────────────
   @Override
   @Transactional(rollbackOn = Exception.class)
-  public Map<String, String> handleIpn(HttpServletRequest request) {
+  public Map<String, String> handleIpn(HttpServerRequest request) {
     try {
       // Thu thập tất cả params từ VNPay
       Map<String, String> fields = extractParams(request);
 
-      String receivedHash = request.getParameter("vnp_SecureHash");
+      String receivedHash = request.getParam("vnp_SecureHash");
       fields.remove("vnp_SecureHashType");
       fields.remove("vnp_SecureHash");
-      log.info("[VNPay IPN] Received: txnRef={}", request.getParameter("vnp_TxnRef"));
+      log.info("[VNPay IPN] Received: txnRef={}", request.getParam("vnp_TxnRef"));
 
       // Bước 1: Verify chữ ký
       String computedHash = hashAllFields(fields);
       if (!computedHash.equals(receivedHash)) {
-        log.warn("[VNPay IPN] Invalid checksum. txnRef={}", request.getParameter("vnp_TxnRef"));
+        log.warn("[VNPay IPN] Invalid checksum. txnRef={}", request.getParam("vnp_TxnRef"));
         return Map.of("RspCode", "97", "Message", "Invalid Checksum");
       }
 
-      String txnRef = request.getParameter("vnp_TxnRef");
-      long vnpAmount = Long.parseLong(request.getParameter("vnp_Amount")); // Đã nhân 100
-      String responseCode = request.getParameter("vnp_ResponseCode");
+      String txnRef = request.getParam("vnp_TxnRef");
+      long vnpAmount = Long.parseLong(request.getParam("vnp_Amount")); // Đã nhân 100
+      String responseCode = request.getParam("vnp_ResponseCode");
 
       // Bước 2: Kiểm tra đơn hàng tồn tại
       Optional<Transaction> optTxn = transactionRepository.findByVnpTxnRef(txnRef);
@@ -132,7 +129,7 @@ public class PaymentServiceImpl implements PaymentService {
       }
 
       // Bước 5: Cập nhật DB
-      txn.setVnpPayDate(request.getParameter("vnp_PayDate"));
+      txn.setVnpPayDate(request.getParam("vnp_PayDate"));
       txn.setVnpResponseCode(responseCode);
 
       if ("00".equals(responseCode)) {
@@ -166,14 +163,14 @@ public class PaymentServiceImpl implements PaymentService {
   // 4. QUERY TRANSACTION & REFUND
   // ─────────────────────────────────────────────────────────────
   @Override
-  public String queryTransaction(String txnRef, HttpServletRequest request) {
+  public String queryTransaction(String txnRef, HttpServerRequest request) {
     Transaction transaction = transactionRepository.findByVnpTxnRef(txnRef)
         .orElseThrow(() -> new VsException(HttpStatus.NOT_FOUND, "Không tìm thấy giao dịch: " + txnRef));
 
     String vnpRequestId = vnPayConfig.getRandomNumber(8);
-    String vnpVersion = vnPayConfig.vnp_Version;
+    String vnpVersion = vnPayConfig.getVnp_Version();
     String vnpCommand = "querydr";
-    String vnpTmnCode = vnPayConfig.vnp_TmnCode;
+    String vnpTmnCode = vnPayConfig.getVnp_TmnCode();
     String vnpTxnRef = transaction.getVnpTxnRef();
     String vnpOrderInfo = "Kiem tra ket qua GD OrderId:" + vnpTxnRef;
     String vnpTransDate = transaction.getVnpTransactionDate();
@@ -188,7 +185,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     String hashData = String.join("|", vnpRequestId, vnpVersion, vnpCommand, vnpTmnCode,
                                   vnpTxnRef, vnpTransDate, vnpCreateDate, vnpIpAddr, vnpOrderInfo);
-    String vnpSecureHash = vnPayConfig.hmacSHA512(vnPayConfig.secretKey, hashData);
+    String vnpSecureHash = vnPayConfig.hmacSHA512(vnPayConfig.getSecretKey(), hashData);
 
     Map<String, String> params = new HashMap<>();
     params.put("vnp_RequestId", vnpRequestId);
@@ -208,7 +205,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         java.net.http.HttpClient httpClient = java.net.http.HttpClient.newHttpClient();
         java.net.http.HttpRequest httpRequest = java.net.http.HttpRequest.newBuilder()
-            .uri(java.net.URI.create(vnPayConfig.vnp_ApiUrl))
+            .uri(java.net.URI.create(vnPayConfig.getVnp_ApiUrl()))
             .header("Content-Type", "application/json")
             .POST(java.net.http.HttpRequest.BodyPublishers.ofString(json))
             .build();
@@ -221,14 +218,14 @@ public class PaymentServiceImpl implements PaymentService {
   }
 
   @Override
-  public String refundTransaction(String txnRef, long amount, String tranType, String createBy, HttpServletRequest request) {
+  public String refundTransaction(String txnRef, long amount, String tranType, String createBy, HttpServerRequest request) {
     Transaction transaction = transactionRepository.findByVnpTxnRef(txnRef)
         .orElseThrow(() -> new VsException(HttpStatus.NOT_FOUND, "Không tìm thấy giao dịch: " + txnRef));
 
     String vnpRequestId = vnPayConfig.getRandomNumber(8);
-    String vnpVersion = vnPayConfig.vnp_Version;
+    String vnpVersion = vnPayConfig.getVnp_Version();
     String vnpCommand = "refund";
-    String vnpTmnCode = vnPayConfig.vnp_TmnCode;
+    String vnpTmnCode = vnPayConfig.getVnp_TmnCode();
     String vnpTransactionType = tranType;
     String vnpTxnRef = transaction.getVnpTxnRef();
     long amountInVnd = amount * 100;
@@ -248,7 +245,7 @@ public class PaymentServiceImpl implements PaymentService {
     String hashData = String.join("|", vnpRequestId, vnpVersion, vnpCommand, vnpTmnCode,
                                   vnpTransactionType, vnpTxnRef, vnpAmount, vnpTransactionNo,
                                   vnpTransDate, createBy, vnpCreateDate, vnpIpAddr, vnpOrderInfo);
-    String vnpSecureHash = vnPayConfig.hmacSHA512(vnPayConfig.secretKey, hashData);
+    String vnpSecureHash = vnPayConfig.hmacSHA512(vnPayConfig.getSecretKey(), hashData);
 
     Map<String, String> params = new HashMap<>();
     params.put("vnp_RequestId", vnpRequestId);
@@ -271,7 +268,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         java.net.http.HttpClient httpClient = java.net.http.HttpClient.newHttpClient();
         java.net.http.HttpRequest httpRequest = java.net.http.HttpRequest.newBuilder()
-            .uri(java.net.URI.create(vnPayConfig.vnp_ApiUrl))
+            .uri(java.net.URI.create(vnPayConfig.getVnp_ApiUrl()))
             .header("Content-Type", "application/json")
             .POST(java.net.http.HttpRequest.BodyPublishers.ofString(json))
             .build();
@@ -314,15 +311,15 @@ public class PaymentServiceImpl implements PaymentService {
         }
       }
     }
-    String secureHash = vnPayConfig.hmacSHA512(vnPayConfig.secretKey, hashData.toString());
-    return vnPayConfig.vnp_PayUrl + "?" + query + "&vnp_SecureHash=" + secureHash;
+    String secureHash = vnPayConfig.hmacSHA512(vnPayConfig.getSecretKey(), hashData.toString());
+    return vnPayConfig.getVnp_PayUrl() + "?" + query + "&vnp_SecureHash=" + secureHash;
   }
 
-  private Map<String, String> extractParams(HttpServletRequest request) {
+  private Map<String, String> extractParams(HttpServerRequest request) {
     Map<String, String> fields = new HashMap<>();
-    for (Enumeration<String> params = request.getParameterNames(); params.hasMoreElements();) {
-      String name = params.nextElement();
-      String value = request.getParameter(name);
+    for (Map.Entry<String, String> entry : request.params()) {
+      String name = entry.getKey();
+      String value = entry.getValue();
       if (value != null && !value.isEmpty()) {
         fields.put(name, value);
       }
@@ -350,6 +347,6 @@ public class PaymentServiceImpl implements PaymentService {
         }
       }
     }
-    return vnPayConfig.hmacSHA512(vnPayConfig.secretKey, hashData.toString());
+    return vnPayConfig.hmacSHA512(vnPayConfig.getSecretKey(), hashData.toString());
   }
 }

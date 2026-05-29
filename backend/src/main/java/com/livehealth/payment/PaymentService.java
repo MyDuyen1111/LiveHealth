@@ -1,6 +1,6 @@
 package com.livehealth.payment;
 
-import jakarta.servlet.http.HttpServletRequest;
+import io.vertx.core.http.HttpServerRequest;
 
 import java.util.Map;
 
@@ -13,7 +13,7 @@ public interface PaymentService {
    * @param request HTTP request để lấy IP
    * @return URL thanh toán VNPay
    */
-  String createPaymentUrl(long amount, HttpServletRequest request);
+  String createPaymentUrl(long amount, HttpServerRequest request);
 
   /**
    * Xử lý IPN callback từ VNPay (Server-to-Server).
@@ -22,7 +22,7 @@ public interface PaymentService {
    * @param request HTTP request chứa params IPN
    * @return Map chứa RspCode và Message theo chuẩn VNPay
    */
-  Map<String, String> handleIpn(HttpServletRequest request);
+  Map<String, String> handleIpn(HttpServerRequest request);
 
   /**
    * Lấy trạng thái hiện tại của giao dịch (dùng cho FE polling).
@@ -38,7 +38,7 @@ public interface PaymentService {
    * @param request HTTP request
    * @return json response từ VNPay
    */
-  String queryTransaction(String txnRef, HttpServletRequest request);
+  String queryTransaction(String txnRef, HttpServerRequest request);
 
   /**
    * Hoàn tiền giao dịch trên hệ thống VNPay.
@@ -50,5 +50,5 @@ public interface PaymentService {
    * @param request HTTP request
    * @return json response từ VNPay
    */
-  String refundTransaction(String txnRef, long amount, String tranType, String createBy, HttpServletRequest request);
+  String refundTransaction(String txnRef, long amount, String tranType, String createBy, HttpServerRequest request);
 }

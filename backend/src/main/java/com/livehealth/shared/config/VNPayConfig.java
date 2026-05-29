@@ -5,7 +5,7 @@ import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import jakarta.servlet.http.HttpServletRequest;
+import io.vertx.core.http.HttpServerRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
@@ -13,31 +13,59 @@ import java.util.Random;
 public class VNPayConfig {
   @Inject
   @ConfigProperty(name = "vnpay.tmn-code")
-  public String vnp_TmnCode;
+  private String vnp_TmnCode;
 
   @Inject
   @ConfigProperty(name = "vnpay.hash-secret")
-  public String secretKey;
+  private String secretKey;
 
   @Inject
   @ConfigProperty(name = "vnpay.url")
-  public String vnp_PayUrl;
+  private String vnp_PayUrl;
 
   @Inject
   @ConfigProperty(name = "vnpay.api-url")
-  public String vnp_ApiUrl;
+  private String vnp_ApiUrl;
 
   @Inject
   @ConfigProperty(name = "vnpay.return-url")
-  public String vnp_ReturnUrl;
+  private String vnp_ReturnUrl;
 
   @Inject
   @ConfigProperty(name = "vnpay.version")
-  public String vnp_Version;
+  private String vnp_Version;
 
   @Inject
   @ConfigProperty(name = "vnpay.command")
-  public String vnp_Command;
+  private String vnp_Command;
+
+  public String getVnp_TmnCode() {
+    return vnp_TmnCode;
+  }
+
+  public String getSecretKey() {
+    return secretKey;
+  }
+
+  public String getVnp_PayUrl() {
+    return vnp_PayUrl;
+  }
+
+  public String getVnp_ApiUrl() {
+    return vnp_ApiUrl;
+  }
+
+  public String getVnp_ReturnUrl() {
+    return vnp_ReturnUrl;
+  }
+
+  public String getVnp_Version() {
+    return vnp_Version;
+  }
+
+  public String getVnp_Command() {
+    return vnp_Command;
+  }
 
   // Code chuẩn của VNPAY để tạo mã băm HmacSHA512
   public String hmacSHA512(final String key, final String data) {
@@ -61,12 +89,12 @@ public class VNPayConfig {
     }
   }
 
-  public String getIpAddress(HttpServletRequest request) {
+  public String getIpAddress(HttpServerRequest request) {
     String ipAdress;
     try {
       ipAdress = request.getHeader("X-FORWARDED-FOR");
-      if (ipAdress == null) {
-        ipAdress = request.getRemoteAddr();
+      if (ipAdress == null || ipAdress.isEmpty()) {
+        ipAdress = request.remoteAddress().host();
       }
     } catch (Exception e) {
       ipAdress = "Invalid IP";

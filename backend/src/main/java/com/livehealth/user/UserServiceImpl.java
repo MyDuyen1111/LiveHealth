@@ -33,9 +33,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import com.livehealth.shared.base.MultipartFile;
+import com.livehealth.cart.Cart;
 import com.livehealth.cart.CartRepository;
+import com.livehealth.cart.CartItemRepository;
+import com.livehealth.order.Order;
 import com.livehealth.order.OrderRepository;
+import com.livehealth.order.OrderItemRepository;
 import com.livehealth.product.ReviewRepository;
+import com.livehealth.news.NewsCommentRepository;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -48,9 +53,15 @@ public class UserServiceImpl implements UserService {
 
     CartRepository cartRepository;
 
+    CartItemRepository cartItemRepository;
+
     OrderRepository orderRepository;
 
+    OrderItemRepository orderItemRepository;
+
     ReviewRepository reviewRepository;
+
+    NewsCommentRepository newsCommentRepository;
 
     UserMapper userMapper;
 
@@ -240,9 +251,22 @@ public class UserServiceImpl implements UserService {
         }
 
         // Delete associated records first to avoid foreign key constraint violations
+        newsCommentRepository.delete("user.id = ?1", userId);
         reviewRepository.delete("user.id = ?1", userId);
-        cartRepository.delete("user.id = ?1", userId);
-        orderRepository.delete("user.id = ?1", userId);
+
+        // Delete cart items first, then delete cart
+        Optional<Cart> cartOpt = cartRepository.findByUserId(userId);
+        if (cartOpt.isPresent()) {
+            cartItemRepository.delete("cart.id = ?1", cartOpt.get().getId());
+            cartRepository.delete(cartOpt.get());
+        }
+
+        // Delete order items first, then delete orders
+        List<Order> orders = orderRepository.findByUserId(userId);
+        for (Order order : orders) {
+            orderItemRepository.delete("order.id = ?1", order.getId());
+            orderRepository.delete(order);
+        }
 
         userRepository.delete(user);
 

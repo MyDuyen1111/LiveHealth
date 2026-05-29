@@ -63,4 +63,10 @@ public class OrderRepository extends BaseRepository<Order, UUID> {
                 .setMaxResults(limit)
                 .getResultList();
     }
+
+    public List<Order> findByUserId(UUID userId) {
+        return em.createQuery("SELECT o FROM Order o WHERE o.user.id = :userId", Order.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
 }
