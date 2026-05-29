@@ -1,5 +1,5 @@
 .wl-wrap {
-  background-color: #f8f9fa;
+  background-color: var(--cream);
   min-height: 80vh;
   padding-bottom: 60px;
 }

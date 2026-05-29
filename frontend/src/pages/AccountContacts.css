@@ -1,5 +1,5 @@
 .usr-contacts-wrap {
-  background-color: #f8f9fa;
+  background-color: var(--cream);
   min-height: 80vh;
 }
 
