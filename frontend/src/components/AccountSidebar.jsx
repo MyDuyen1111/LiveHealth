@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LayoutDashboard, ShoppingBag, ShoppingCart, Settings, LogOut, Shield, MessageSquare } from 'lucide-react';
 import { useLang } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
+import { get } from '../api/apiClient';
 import './AccountSidebar.css';
 
 const navItems = [
@@ -15,6 +17,13 @@ const navItems = [
 const AccountSidebar = ({ activeItem }) => {
   const { t } = useLang();
   const { logout, user } = useAuth();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    get('/contact/my-unread-count')
+      .then(res => setUnreadCount(res || 0))
+      .catch(() => {});
+  }, [activeItem]);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -38,6 +47,21 @@ const AccountSidebar = ({ activeItem }) => {
               >
                 <Icon size={20} />
                 <span>{t(item.labelKey)}</span>
+                {item.key === 'contacts' && unreadCount > 0 && (
+                  <span className="acc-sidebar-badge" style={{
+                    background: '#ef4444',
+                    color: '#ffffff',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    padding: '2px 7px',
+                    borderRadius: '10px',
+                    marginLeft: 'auto',
+                    display: 'inline-block',
+                    lineHeight: '1.2'
+                  }}>
+                    {unreadCount}
+                  </span>
+                )}
               </Link>
             </li>
           );

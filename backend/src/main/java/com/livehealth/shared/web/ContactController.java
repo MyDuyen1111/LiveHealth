@@ -105,4 +105,15 @@ public class ContactController {
         }
         return VsResponseUtil.success(new CommonResponseDto(HttpStatus.OK, "Đã đánh dấu tất cả phản hồi là đã đọc."));
     }
+
+    @GET
+    @Path("/my-unread-count")
+    public Response getMyUnreadCount() {
+        String email = com.livehealth.shared.security.SecurityUtils.getCurrentEmail();
+        if (email == null || email.isBlank()) {
+            return VsResponseUtil.success(0L);
+        }
+        long count = contactMessageRepository.countUnreadRepliedMessages(email);
+        return VsResponseUtil.success(count);
+    }
 }

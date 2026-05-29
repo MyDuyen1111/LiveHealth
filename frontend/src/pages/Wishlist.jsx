@@ -1,9 +1,11 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useWishlist } from '../context/WishlistContext';
 import { useCart } from '../context/CartContext';
 import { useLang } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { formatPrice } from '../utils/format';
+import { productApi } from '../api/productApi';
 import { Heart, ShoppingBag, Trash2 } from 'lucide-react';
 import './Wishlist.css';
 
@@ -12,6 +14,42 @@ const Wishlist = () => {
   const { addToCart } = useCart();
   const { t } = useLang();
   const { isAuthenticated } = useAuth();
+  const [realtimeWishlist, setRealtimeWishlist] = useState(wishlist);
+
+  useEffect(() => {
+    if (wishlist.length === 0) {
+      setRealtimeWishlist([]);
+      return;
+    }
+
+    // Set initial fallback items to prevent empty screen flash
+    setRealtimeWishlist(prev => {
+      // Keep existing fetched properties, or map new items from context
+      return wishlist.map(item => {
+        const found = prev.find(p => p.id === item.id);
+        return found ? { ...item, ...found } : item;
+      });
+    });
+
+    // Fetch latest info for all wishlist items
+    Promise.all(
+      wishlist.map(item =>
+        productApi.getById(item.id)
+          .then(latestProduct => {
+            return {
+              ...item,
+              ...latestProduct,
+            };
+          })
+          .catch(err => {
+            console.error(`Failed to refresh wishlist item ${item.id}:`, err);
+            return item;
+          })
+      )
+    ).then(refreshedItems => {
+      setRealtimeWishlist(refreshedItems);
+    });
+  }, [wishlist]);
 
   const handleAddToCart = (product) => {
     addToCart(product);
@@ -54,7 +92,7 @@ const Wishlist = () => {
                 </tr>
               </thead>
               <tbody>
-                {wishlist.map((product) => {
+                {realtimeWishlist.map((product) => {
                   const img = product.imageUrl?.[0] || product.img || 'https://placehold.co/';
                   const stockQuantity = Math.max(Number(product.stock) || 0, 0);
                   const isOutOfStock = stockQuantity === 0;
@@ -114,3 +152,4 @@ const Wishlist = () => {
 };
 
 export default Wishlist;
+
