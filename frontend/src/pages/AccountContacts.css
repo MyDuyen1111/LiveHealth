@@ -2,32 +2,35 @@
   background-color: var(--cream);
   min-height: 80vh;
 }
-
 .usr-contacts-bc {
-  background: #ffffff;
-  border-bottom: 1px solid #eeeeee;
-  padding: 12px 0;
-  font-size: 14px;
+  background: var(--gray-900);
+  padding: 14px 0;
 }
 
 .usr-contacts-bc-inner {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #666666;
+  font-size: 13px;
+  color: var(--gray-400);
 }
 
 .usr-contacts-bc-inner a {
-  color: #2c742f;
+  color: var(--gray-400);
   text-decoration: none;
+  transition: color 0.2s;
+}
+
+.usr-contacts-bc-inner a:hover {
+  color: var(--white);
 }
 
 .usr-contacts-bc-inner span {
-  color: #cccccc;
+  color: var(--gray-400);
 }
 
 .usr-contacts-bc-inner .bc-active {
-  color: #2c742f;
+  color: var(--green);
   font-weight: 500;
 }
 
