@@ -86,6 +86,18 @@ public abstract class BaseRepository<T, ID> {
         }
     }
 
+    @jakarta.transaction.Transactional
+    public int delete(String query, Object... params) {
+        String jpql = "DELETE FROM " + entityClass.getSimpleName() + " e WHERE " + query;
+        var q = em.createQuery(jpql);
+        if (params != null) {
+            for (int i = 0; i < params.length; i++) {
+                q.setParameter(i + 1, params[i]);
+            }
+        }
+        return q.executeUpdate();
+    }
+
     public List<T> findAll() {
         return em.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass).getResultList();
     }

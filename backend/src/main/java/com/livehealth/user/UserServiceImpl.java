@@ -33,6 +33,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import com.livehealth.shared.base.MultipartFile;
+import com.livehealth.cart.CartRepository;
+import com.livehealth.order.OrderRepository;
+import com.livehealth.product.ReviewRepository;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -42,6 +45,12 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     AddressRepository addressRepository;
+
+    CartRepository cartRepository;
+
+    OrderRepository orderRepository;
+
+    ReviewRepository reviewRepository;
 
     UserMapper userMapper;
 
@@ -229,6 +238,11 @@ public class UserServiceImpl implements UserService {
         if (user.getAddress() != null) {
             addressId = user.getAddress().getId();
         }
+
+        // Delete associated records first to avoid foreign key constraint violations
+        reviewRepository.delete("user.id = ?1", userId);
+        cartRepository.delete("user.id = ?1", userId);
+        orderRepository.delete("user.id = ?1", userId);
 
         userRepository.delete(user);
 
