@@ -343,7 +343,7 @@ products_data = [
         "sku": "FISH-010",
         "oldPrice": 950000.0,
         "stock": 12,
-        "image": "https://images.unsplash.com/photo-1559742811-824289528574?w=600"
+        "image": "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&q=80&w=600"
     },
     {
         "category": "Cá & Hải sản",
@@ -455,7 +455,7 @@ products_data = [
         "sku": "DAIRY-006",
         "oldPrice": 42000.0,
         "stock": 180,
-        "image": "https://images.unsplash.com/photo-1516448424-47efefefefef?w=600"
+        "image": "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&q=80&w=600"
     },
     {
         "category": "Trứng & Sữa",
@@ -465,7 +465,7 @@ products_data = [
         "sku": "DAIRY-007",
         "oldPrice": 30000.0,
         "stock": 150,
-        "image": "https://images.unsplash.com/photo-1516448424-47efefefefef?w=600"
+        "image": "https://images.unsplash.com/photo-1598965402089-897c40b8a4f6?auto=format&fit=crop&q=80&w=600"
     },
     {
         "category": "Trứng & Sữa",
@@ -587,7 +587,7 @@ products_data = [
         "sku": "VEG-004",
         "oldPrice": 45000.0,
         "stock": 90,
-        "image": "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&q=80&w=600"
+        "image": "https://images.unsplash.com/photo-1596097635121-14b63b7a0c1f?auto=format&fit=crop&q=80&w=600"
     },
     {
         "category": "Rau Củ",
@@ -667,7 +667,7 @@ products_data = [
         "sku": "VEG-012",
         "oldPrice": 60000.0,
         "stock": 70,
-        "image": "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600"
+        "image": "https://images.unsplash.com/photo-1504387828636-abeb50778c0c?auto=format&fit=crop&q=80&w=600"
     },
     {
         "category": "Rau Củ",
@@ -677,7 +677,7 @@ products_data = [
         "sku": "VEG-013",
         "oldPrice": 18000.0,
         "stock": 160,
-        "image": "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600"
+        "image": "https://images.unsplash.com/photo-1504387828636-abeb50778c0c?auto=format&fit=crop&q=80&w=600"
     },
     {
         "category": "Rau Củ",
@@ -779,7 +779,7 @@ products_data = [
         "sku": "FRUIT-008",
         "oldPrice": 75000.0,
         "stock": 90,
-        "image": "https://images.unsplash.com/photo-1557800636-894a64c1696f?w=600"
+        "image": "https://images.unsplash.com/photo-1550596334-7bb40a71b6bc?auto=format&fit=crop&q=80&w=600"
     },
     {
         "category": "Hoa Quả",
@@ -849,7 +849,7 @@ products_data = [
         "sku": "FRUIT-015",
         "oldPrice": 85000.0,
         "stock": 60,
-        "image": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600"
+        "image": "https://images.unsplash.com/photo-1501747315-124a0eaca060?auto=format&fit=crop&q=80&w=600"
     },
 
     # === CATEGORY: Gạo & Đồ khô ===
@@ -931,7 +931,7 @@ products_data = [
         "sku": "DRY-008",
         "oldPrice": 120000.0,
         "stock": 60,
-        "image": "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600"
+        "image": "https://images.unsplash.com/photo-1504387828636-abeb50778c0c?auto=format&fit=crop&q=80&w=600"
     },
     {
         "category": "Gạo & Đồ khô",
@@ -941,7 +941,7 @@ products_data = [
         "sku": "DRY-009",
         "oldPrice": 75000.0,
         "stock": 80,
-        "image": "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600"
+        "image": "https://images.unsplash.com/photo-1504387828636-abeb50778c0c?auto=format&fit=crop&q=80&w=600"
     },
     {
         "category": "Gạo & Đồ khô",
