@@ -5,6 +5,8 @@ import { useLang } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import './Login.css';
 
+const EMAIL_PATTERN = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+$/;
+
 const Login = () => {
   const { t } = useLang();
   const { login, isAuthenticated } = useAuth();
@@ -12,6 +14,7 @@ const Login = () => {
   const [showPw, setShowPw] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -21,16 +24,49 @@ const Login = () => {
     return null;
   }
 
+  const clearError = (field) =>
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+
+  // ── Validate các trường, trả về map lỗi ──
+  const validate = () => {
+    const e = {};
+    const em = email.trim();
+
+    if (!em) e.email = 'Hãy nhập email của bạn';
+    else if (!EMAIL_PATTERN.test(em)) e.email = 'Email không đúng định dạng';
+
+    if (!password.trim()) e.password = 'Hãy nhập mật khẩu của bạn';
+
+    return e;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    const eMap = validate();
+    setErrors(eMap);
+    if (Object.keys(eMap).length > 0) return;
+
     setLoading(true);
     const result = await login(email.trim(), password.trim());
     setLoading(false);
     if (result.success) {
       navigate(result.role === 'ADMIN' ? '/admin' : '/account');
+      return;
+    }
+
+    // Sai email (không tồn tại) hoặc sai mật khẩu → cùng một thông báo
+    const msg = result.error || 'Login failed';
+    if (/email\.or\.password\.wrong|invalid.?credential/i.test(msg)) {
+      setError('Email hoặc mật khẩu không chính xác!');
     } else {
-      setError(result.error);
+      setError(msg);
     }
   };
 
@@ -54,15 +90,18 @@ const Login = () => {
 
           {error && <div className="auth-error">{t(error)}</div>}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
             <div className="auth-field">
               <input
                 type="email"
                 placeholder={t('login.email')}
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                aria-invalid={!!errors.email}
+                onChange={e => { setEmail(e.target.value); clearError('email'); }}
+                onBlur={() => setEmail(v => v.trim())}
                 required
               />
+              {errors.email && <p className="auth-field-error">{errors.email}</p>}
             </div>
 
             <div className="auth-field auth-field-pw">
@@ -70,7 +109,8 @@ const Login = () => {
                 type={showPw ? 'text' : 'password'}
                 placeholder={t('login.password')}
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                aria-invalid={!!errors.password}
+                onChange={e => { setPassword(e.target.value); clearError('password'); }}
                 required
               />
               <button
@@ -80,6 +120,7 @@ const Login = () => {
               >
                 {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
+              {errors.password && <p className="auth-field-error">{errors.password}</p>}
             </div>
 
             <div className="auth-extras">
